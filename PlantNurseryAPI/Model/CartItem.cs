@@ -2,7 +2,7 @@
 
 namespace PlantNurseryAPI.Model
 {
-    public class Cart_item
+    public class CartItem
     {
         public int Id { get; set; }
         [ForeignKey(nameof(Customer))]

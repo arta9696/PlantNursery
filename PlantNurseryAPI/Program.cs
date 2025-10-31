@@ -27,6 +27,12 @@ namespace PlantNurseryAPI
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            else
+            {
+                using var scope = app.Services.CreateScope();
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+                dbContext.Database.Migrate();
+            }
 
             app.UseHttpsRedirection();
             //app.UseAuthorization();

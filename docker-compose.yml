@@ -37,6 +37,18 @@ services:
     restart: unless-stopped
     tty: true
     stdin_open: true
+  
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api_container
+    ports:
+      - "8180:8080"
+      - "8181:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
 
 volumes:
   pgdata:

@@ -11,7 +11,6 @@ namespace PlantNurseryAPI.Model
         public string? Address { get; set; }
         public Account Account { get; set; } = null!;
 
-        public List<Cart_item> Cart_Items { get; } = [];
-        public List<Product> Products { get; } = [];
+        public List<CartItem> CartItems { get; } = [];
     }
 }

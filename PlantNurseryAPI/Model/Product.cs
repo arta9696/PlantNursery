@@ -12,7 +12,6 @@ namespace PlantNurseryAPI.Model
         public float Price { get; set; }
         public byte[]? Image { get; set; }
 
-        public List<Cart_item> Cart_Items { get; } = [];
-        public List<Customer> Customers { get; } = [];
+        public List<CartItem> CartItems { get; } = [];
     }
 }

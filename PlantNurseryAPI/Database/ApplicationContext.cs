@@ -9,7 +9,7 @@ namespace PlantNurseryAPI.Database
         DbSet<Account> Accounts { get; set; } = null!;
         DbSet<Customer> Customers { get; set; } = null!;
         DbSet<Product> Products { get; set; } = null!;
-        DbSet<Cart_item> CartItems { get; set; } = null!;
+        DbSet<CartItem> CartItems { get; set; } = null!;
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options): base(options)
         {
