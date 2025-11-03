@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using PlantNurseryAPI.Database;
 using PlantNurseryAPI.Model;
 
 namespace PlantNurseryAPI.Controllers
@@ -16,17 +18,49 @@ namespace PlantNurseryAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Get([FromBody] AccountIdClass account)
+        public IActionResult Get([FromBody] AccountIdClass AccountId, ApplicationContext db)
         {
             //Code for getting account data
-            return Ok(new AccountPutClass() { AccountId = 0, Address = "Pushkina", Email = "a@b.ru", FullName = "Ivan I.I.", Password="abcde"});
+            try
+            {
+                var accountSelect = db.Accounts.Where(x => x.Id == AccountId.AccountId).FirstOrDefault();
+                if (accountSelect == null) return NotFound();
+
+                var customer = db.Customers.Where(x => x.AccountId == AccountId.AccountId).First();
+
+                return Ok(new AccountPutClass()
+                { AccountId = AccountId.AccountId, Address = customer.Address ?? "", Email = accountSelect.Email, FullName = customer.FullName ?? "", Password = accountSelect.Password });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.ToString());
+            }
+            
         }
 
         [HttpPut]
-        public IActionResult Put([FromBody] AccountPutClass account)
+        public IActionResult Put([FromBody] AccountPutClass account, ApplicationContext db)
         {
             //Code for updating account data
-            return Ok(account);
+            try
+            {
+                var accountSelect = db.Accounts.Where(x => x.Id == account.AccountId).FirstOrDefault();
+                if (accountSelect == null) return NotFound();
+
+                var customer = db.Customers.Where(x => x.AccountId == account.AccountId).First();
+                customer.FullName = account.FullName;
+                customer.Address = account.Address;
+                db.Customers.Update(customer);
+
+                db.SaveChanges();
+
+                return Ok(account);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.ToString());
+            }
+            
         }
     }
 }

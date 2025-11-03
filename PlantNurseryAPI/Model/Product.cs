@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace PlantNurseryAPI.Model
 {
@@ -11,7 +12,7 @@ namespace PlantNurseryAPI.Model
         [Required]
         public float Price { get; set; }
         public byte[]? Image { get; set; }
-
+        [JsonIgnore]
         public List<CartItem> CartItems { get; } = [];
     }
 }

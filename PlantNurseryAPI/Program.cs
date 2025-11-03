@@ -1,6 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using PlantNurseryAPI.Database;
+using PlantNurseryAPI.Model;
 
 namespace PlantNurseryAPI
 {
@@ -29,9 +30,17 @@ namespace PlantNurseryAPI
             }
             else
             {
+                //app.UseSwagger();
+                //app.UseSwaggerUI();
+
                 using var scope = app.Services.CreateScope();
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
                 dbContext.Database.Migrate();
+
+                dbContext.Roles.Add(new Role() { Name = "Manager" });
+                dbContext.Roles.Add(new Role() { Name = "Customer" });
+
+                dbContext.SaveChanges();
             }
 
             app.UseHttpsRedirection();

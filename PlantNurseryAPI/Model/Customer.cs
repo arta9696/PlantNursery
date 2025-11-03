@@ -7,7 +7,7 @@ namespace PlantNurseryAPI.Model
         public int Id { get; set; }
         [ForeignKey(nameof(Account))]
         public int AccountId { get; set; }
-        public string? Full_name { get; set; }
+        public string? FullName { get; set; }
         public string? Address { get; set; }
         public Account Account { get; set; } = null!;
 

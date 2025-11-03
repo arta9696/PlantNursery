@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PlantNurseryAPI.Model
 {
+    [Index(nameof(CustomerId), nameof(ProductId), IsUnique = true)]
     public class CartItem
     {
         public int Id { get; set; }
