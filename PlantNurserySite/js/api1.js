@@ -122,6 +122,45 @@ async function updateProfile(accountId, email, fullName, address, password) {
   return res.json();
 }
 
+function decodePossiblyEncodedString(encodedString) {
+    try {
+        // First, try URL decoding
+        const decodedUrl = decodeURIComponent(encodedString);
+        // If the URL decoding significantly changed the string and it doesn't look like a URL-safe Base64,
+        // it's likely a URL-encoded string.
+        // This is a heuristic; a more robust check might involve regex for common URL patterns.
+        if (decodedUrl !== encodedString && !/^[A-Za-z0-9\-_]+={0,2}$/.test(encodedString)) {
+            return decodedUrl;
+        }
+    } catch (e) {
+        // If decodeURIComponent throws an error, it's not a valid URI component.
+        // Proceed to Base64 decoding.
+    }
+
+    try {
+        // Prepare for Base64 decoding (handle URL-safe characters and padding)
+        let base64String = encodedString
+            .replace(/-/g, '+')
+            .replace(/_/g, '/');
+
+        // Add padding if missing for standard atob()
+        const paddingNeeded = base64String.length % 4;
+        if (paddingNeeded === 2) {
+            base64String += '==';
+        } else if (paddingNeeded === 3) {
+            base64String += '=';
+        }
+
+        // Attempt Base64 decoding
+        return atob(base64String);
+    } catch (e) {
+        // If atob throws an error, it's not valid Base64.
+        // In this case, return the original string or handle as an unknown format.
+        console.warn("Could not decode string as URL or Base64:", encodedString, e);
+        return encodedString; // Or throw an error, or return null
+    }
+}
+
 // // --- Регистрация ---
 // export async function register(email, password) {
 //   const res = await fetch(`${API_HOST}/account/register`, {

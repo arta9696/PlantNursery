@@ -24,7 +24,7 @@ async function loadCatalog() {
             //     `;
 
             card.innerHTML = `
-                <img src="${p.image}" alt="${p.title}" class="product-image">
+                <img src="${decodePossiblyEncodedString(p.image)}" alt="${p.title}" class="product-image">
                 <h3 class="product-title">${p.title}</h3>
                 <p class="product-price">${p.price} ₽</p>
                 `;

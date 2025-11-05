@@ -44,9 +44,9 @@ services:
       context: .
       dockerfile: DockerfileAPI
     container_name: api_container
-    ports:
-      - "8180:8080"
-      - "8181:8081"
+#    ports:
+#      - "8180:8080"
+#      - "8181:8081"
     depends_on:
       postgres:
         condition: service_healthy
