@@ -34,7 +34,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 3s
+      start_period: 5s
     restart: unless-stopped
     tty: true
     stdin_open: true

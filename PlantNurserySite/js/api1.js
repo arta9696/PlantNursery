@@ -108,7 +108,7 @@ async function getProfile(accountId) {
   return res.json();
 }
 
-async function updateProfile(accountId, email, full_name, address, password) {
+async function updateProfile(accountId, email, fullName, address, password) {
   const res = await fetch(`${API_HOST}/customer/profile`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },

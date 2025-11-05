@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-      await updateProfile(accountId, fullname, address, password);
+      await updateProfile(accountId, email, fullname, address, password);
       showMessage("✅ Данные успешно обновлены", "success");
 
       // через 2 секунды возвращаем в профиль

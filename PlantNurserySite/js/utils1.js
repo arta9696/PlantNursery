@@ -1,8 +1,8 @@
 // Роли пользователей
 const ROLES = {
-    GUEST: "guest",
-    CUSTOMER: "customer",
-    MANAGER: "manager"
+    GUEST: "Guest",
+    CUSTOMER: "Customer",
+    MANAGER: "Manager"
 };
 
 // Можно добавить и другие общие константы, например:

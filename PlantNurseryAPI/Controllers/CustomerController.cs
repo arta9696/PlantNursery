@@ -60,6 +60,11 @@ namespace PlantNurseryAPI.Controllers
 
                 return Ok(account);
             }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest();
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
