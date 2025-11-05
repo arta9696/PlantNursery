@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <script src="./js/main.js"></script>
+    <script src="./js/utils1.js"></script>
+    <script src="./storage/storage1.js"></script>
+    <script src="./js/api1.js"></script>
+    <script src="./js/auth.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Сангрия</title>
+    <link rel="stylesheet" href="css/style1.css" />
+</head>
+
+<body>
+    <div id="menu-container"></div>
+    <div class="auth-container">
+        <h1>Вход в аккаунт</h1>
+
+        <form id="login-form">
+            <div class="form-group">
+                <label for="email">Электронная почта</label>
+                <input type="email" id="email" placeholder="Введите email" required>
+                <small class="error-message" id="email-error"></small>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Пароль</label>
+                <input type="password" id="password" placeholder="Введите пароль" required>
+                <small class="error-message" id="password-error"></small>
+            </div>
+
+            <button type="submit" id="login-btn">Войти</button>
+
+            <p class="register-link">
+                Нет аккаунта? <a href="register.html">Зарегистрироваться</a>
+            </p>
+        </form>
+    </div>
+</body>
+
+</html>

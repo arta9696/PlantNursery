@@ -34,6 +34,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+      start_period: 3s
     restart: unless-stopped
     tty: true
     stdin_open: true
@@ -41,7 +42,7 @@ services:
   api:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: DockerfileAPI
     container_name: api_container
     ports:
       - "8180:8080"
@@ -49,7 +50,15 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-
+  web:
+    build:
+      context: .
+      dockerfile: DockerfileSite
+    container_name: web_container
+    ports:
+      - "80:80"
+    depends_on: 
+      - api
 volumes:
   pgdata:
     driver: local

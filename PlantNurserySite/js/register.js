@@ -1,0 +1,39 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("login-form");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const emailError = document.getElementById("email-error");
+    const passwordError = document.getElementById("password-error");
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const email = emailInput.value.trim();
+        const password = passwordInput.value.trim();
+
+        // Очистка ошибок
+        emailError.textContent = "";
+        passwordError.textContent = "";
+
+        // Проверка e-mail
+        if (!email.includes("@")) {
+            emailError.textContent = "Некорректный адрес почты";
+            return;
+        }
+
+        // Проверка пароля (латинские буквы и цифры, длина 7-10)
+        const passwordRegex = /^[A-Za-z0-9]{7,10}$/;
+        if (!passwordRegex.test(password)) {
+            passwordError.textContent = "Пароль должен содержать 7–10 латинских символов или цифр";
+            return;
+        }
+
+        // Отправка на сервер
+        try {
+            const data = await register(email, password);
+        } catch (err) {
+            console.error("Ошибка:", err);
+            alert("Ошибка сервиса! Попробуйте позже!");
+        }
+    });
+});

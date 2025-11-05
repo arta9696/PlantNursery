@@ -9,6 +9,7 @@ namespace PlantNurseryAPI
     {
         public static void Main(string[] args)
         {
+            var AnyPolicy = "_AnyPolicy";
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -19,6 +20,18 @@ namespace PlantNurseryAPI
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Logging.AddConsole();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: AnyPolicy,
+                                  policy =>
+                                  {
+                                      policy.AllowAnyOrigin()
+                                      .AllowAnyHeader()
+                                      .AllowAnyMethod();
+                                  });
+            });
+
 
             var app = builder.Build();
 
@@ -42,6 +55,8 @@ namespace PlantNurseryAPI
 
                 dbContext.SaveChanges();
             }
+
+            app.UseCors(AnyPolicy);
 
             app.UseHttpsRedirection();
             //app.UseAuthorization();

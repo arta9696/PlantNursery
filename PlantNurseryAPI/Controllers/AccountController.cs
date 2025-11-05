@@ -6,7 +6,7 @@ using PlantNurseryAPI.Model;
 
 namespace PlantNurseryAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/account")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -23,22 +23,27 @@ namespace PlantNurseryAPI.Controllers
             //code for registration
             try
             {
+                _logger.LogInformation("Starting registration of: " + account.Email);
                 db.Accounts.Add(new Account()
                 { Email = account.Email, Password = account.Password, Role = db.Roles.Where(x => x.Name == "Customer").First() });
                 db.SaveChanges();
+                _logger.LogInformation("Account created: " + account.Email);
 
                 db.Customers.Add(new Customer()
                 { Account = db.Accounts.Where(x => x.Email == account.Email && x.Password == account.Password).First() });
                 db.SaveChanges();
+                _logger.LogInformation("Customer created: " + account.Email);
 
                 return StatusCode(201);
             }
             catch (DbUpdateException ex)
             {
+                _logger.LogError(ex.Message);
                 return Conflict();
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return StatusCode(500, ex.ToString());
             }
         }
@@ -49,13 +54,16 @@ namespace PlantNurseryAPI.Controllers
             //Code for checking account
             try
             {
-                var authAccount = db.Accounts.Where(x=>x.Email==account.Email&&x.Password==account.Password).FirstOrDefault();
-                if (authAccount==null) return NotFound();
-
-                return Ok(new AccountIdClass() { AccountId = authAccount.Id, Role = db.Roles.Where(x=>x.Id == authAccount.RoleId).First().Name });
+                _logger.LogInformation("Starting auth of: " + account.Email);
+                var authAccount = db.Accounts.FirstOrDefault(x => x.Email == account.Email);
+                if (authAccount == null) { _logger.LogWarning("Account not found: " + account.Email); return NotFound(); }
+                if (authAccount.Password != account.Password) { _logger.LogWarning("Account password wrong: " + account.Email); return Unauthorized(); }
+                _logger.LogInformation("Authorized: " + account.Email);
+                return Ok(new AccountIdClass() { AccountId = authAccount.Id, Role = db.Roles.First(x => x.Id == authAccount.RoleId).Name });
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return StatusCode(500, ex.ToString());
             }
         }

@@ -6,7 +6,7 @@ using PlantNurseryAPI.Model;
 
 namespace PlantNurseryAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/products")]
     [ApiController]
     public class ProductsController : ControllerBase
     {
@@ -23,10 +23,14 @@ namespace PlantNurseryAPI.Controllers
             //Code for getting all products
             try
             {
-                return Ok(db.Products.ToList());
+                _logger.LogInformation("Starting products select");
+                var products = db.Products.ToList();
+                _logger.LogInformation("Products selected");
+                return Ok(new { products });
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return StatusCode(500, ex.ToString());
             }
         }
@@ -37,13 +41,15 @@ namespace PlantNurseryAPI.Controllers
             //Code for getting product by id
             try
             {
+                _logger.LogInformation("Starting products select of: " + id);
                 var product = db.Products.FirstOrDefault(x => x.Id == id);
-                if (product == null) return NotFound();
-
+                if (product == null) { _logger.LogWarning("Product not found: " + id); return NotFound(); }
+                _logger.LogInformation("Product selected: " + id);
                 return Ok(product);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return StatusCode(500, ex.ToString());
             }
         }
@@ -54,23 +60,27 @@ namespace PlantNurseryAPI.Controllers
             //Code for adding product in cart
             try
             {
+                _logger.LogInformation("Starting products add of: " + id + "\nto: " + account.AccountId);
                 var product = db.Products.FirstOrDefault(x => x.Id == id);
-                if (product == null) return NotFound("Product");
+                if (product == null) { _logger.LogWarning("Product not found: " + id); return NotFound("Product"); }
 
                 var customer = db.Customers.FirstOrDefault(x => x.AccountId == account.AccountId);
-                if (customer == null) return NotFound("Customer");
+                if (customer == null) { _logger.LogWarning("Account not found: " + account.AccountId); return NotFound("Customer"); }
 
                 db.CartItems.Add(new CartItem() { Product = product, Customer = customer });
                 db.SaveChanges();
+                _logger.LogInformation("Product added: " + id + "\nto: " + account.AccountId);
 
                 return Ok();
             }
             catch (DbUpdateException ex)
             {
+                _logger.LogError(ex.Message);
                 return Conflict();
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return StatusCode(500, ex.ToString());
             }
         }

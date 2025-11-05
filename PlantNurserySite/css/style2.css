@@ -1,0 +1,428 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@500&display=swap');
+
+/* ГЛАВНОЕ МЕНЮ */
+/*  название сайта*/
+.logo {
+    display: flex;
+    align-items: baseline;
+    /* выравнивает “питомник растений” по низу слова САНГРИЯ */
+    gap: 14px;
+    /* расстояние между словами */
+}
+
+.logo-subtitle {
+    font-family: "Georgia", serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: #2f5130;
+    /* тёмно-зелёный, природный оттенок */
+    letter-spacing: 3px;
+    /* пространство между буквами */
+    text-transform: uppercase;
+    /* всё капсом */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    /* лёгкая тень */
+    margin: 0;
+    cursor: pointer;
+    /* чтобы выглядело кликабельно */
+    margin: 0;
+}
+
+.logo-title {
+    font-family: "Georgia", serif;
+    font-size: 40px;
+    font-weight: bold;
+    color: #2f5130;
+    /* тёмно-зелёный, природный оттенок */
+    letter-spacing: 4px;
+    /* пространство между буквами */
+    text-transform: uppercase;
+    /* всё капсом */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    /* лёгкая тень */
+    margin: 0;
+    cursor: pointer;
+    /* чтобы выглядело кликабельно */
+    padding: 7px;
+    transition: transform 0.2s ease;
+}
+
+.logo-title:hover {
+    transform: scale(1.05);
+    /* лёгкое увеличение при наведении */
+}
+
+/* фон главного меню */
+.main-header {
+    /* background-image: url('https://www.toptal.com/designers/subtlepatterns/uploads/leaves.png'); */
+    /* https://www.toptal.com/designers/subtlepatterns/uploads/leaves.png */
+    /* https://www.toptal.com/designers/subtlepatterns/uploads/green_gobbler.png */
+    /* https://www.toptal.com/designers/subtlepatterns/uploads/green_cup.png */
+    background-color: #cfe3cc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    border-bottom: 4px solid #9ebc9a;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* кнопки навигации */
+.main-nav button {
+    min-width: 150px;
+    /* 🔹 одинаковая ширина */
+    text-align: center;
+    margin: 0 5px;
+    padding: 8px 15px;
+    border: none;
+    /* background: #6bbf59; */
+    background: #3d7038;
+    color: #fff;
+    font-size: 20px;
+    /* color: #ffffff; */
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.main-nav button:hover {
+    /* background: #5aa84a; */
+    background: rgb(35, 81, 25);
+}
+
+.home-link {
+    text-decoration: none;
+    color: #2e4a2f;
+}
+
+
+/* -----------------------------------КАТАЛОГ */
+body {
+    font-family: "Inter", sans-serif;
+    /* background: linear-gradient(135deg, #dff6c5 0%, #d8f5b6 50%, #d3f4ae 100%); */
+    /* background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 50%, #f9fbe7 100%); */
+    background-color: #e5fae2;
+    /* background-image: url('https://www.toptal.com/designers/subtlepatterns/uploads/green_cup.png'); */
+    /* background-image: url('https://www.toptal.com/designers/subtlepatterns/uploads/leaves.png'); */
+    margin: 0;
+    padding: 20px;
+}
+
+.catalog-title {
+    /* text-align: center;
+    font-size: 2em;
+    margin-bottom: 30px;
+    color: #3a3a3a; */
+    text-align: center;
+    font-family: "Georgia", serif;
+    font-size: 30px;
+    font-weight: bold;
+    color: #2f5130;
+    letter-spacing: 4px;
+    /* пространство между буквами */
+    text-transform: uppercase;
+    /* всё капсом */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    /*тень*/
+    margin-bottom: 30px;
+}
+
+/* --- СЕТКА КАТАЛОГА --- */
+.catalog-grid {
+    display: grid;
+    /*способ выстраивать элементы в сетку */
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    /*Создай столько колонок, сколько влезет, каждая колонка — минимум 260px, но может растягиваться до 1 доли (1fr) доступного места*/
+    gap: 24px;
+    justify-items: center;
+    align-items: start;
+    padding: 0 10px;
+    transition: all 0.3s ease;
+}
+
+/* --- КАРТОЧКИ ТОВАРОВ --- */
+.product-card {
+    background: white;
+    border-radius: 16px;
+    /* padding: 16px; */
+    padding: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 320px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* --- ИЗОБРАЖЕНИЕ --- */
+.product-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+/* --- ТЕКСТ --- */
+.product-title {
+    margin: 12px 0 8px;
+    font-size: 1.2em;
+    color: #2b2b2b;
+    cursor: pointer;
+}
+
+.product-title:hover {
+    color: #2e7d32;
+}
+
+.product-desc {
+    font-size: 0.9em;
+    color: #666;
+    height: 38px;
+    overflow: hidden;
+}
+
+.product-price {
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #388e3c;
+    margin-top: 8px;
+}
+
+/* --- АДАПТИВНОСТЬ --- */
+@media (max-width: 1200px) {
+    .catalog-grid {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .catalog-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+    }
+
+    .product-card {
+        max-width: 260px;
+        padding: 12px;
+    }
+
+    .product-image {
+        height: 180px;
+    }
+}
+
+@media (max-width: 480px) {
+    .catalog-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .product-card {
+        max-width: 100%;
+    }
+}
+
+/* -----------------------------КАРТОЧКА ТОВАРА */
+.item-horizontal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 85vw;
+    height: 70vh;
+    /* Зависит от высоты окна */
+    margin: 60px auto;
+    padding: 50px;
+    gap: 60px;
+}
+
+/* Левая часть с изображением */
+.item-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90%;
+}
+
+/* Само изображение */
+.item-image img {
+    width: 100%;
+    /* Заполняет всю ширину своей колонки */
+    height: auto;
+    /* Сохраняет пропорции */
+    max-height: 100%;
+    /* Не выходит за пределы блока */
+    object-fit: scale-down;
+    /* Масштабирует, но не обрезает */
+    border-radius: 10px;
+    transform: scale(1.2);
+    /* transition: transform 0.3s ease; */
+}
+
+/* .item-image img:hover {
+    transform: scale(1.3);
+} */
+
+/* Правая часть с описанием */
+.item-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+}
+
+.item-info h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.item-info p {
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.item-price {
+    font-weight: bold;
+    color: #d32f2f;
+    font-size: 1.3rem;
+}
+
+#addToCartBtn {
+    width: 50%;
+    /*чтобы влезла кнопка избранное*/
+    background-color: #2e7d32;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 24px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+#addToCartBtn:hover {
+    background-color: #1b5e20;
+}
+
+/* ---------------------------- АВТОРИЗАЦИЯ */
+/* ---------- Авторизация ---------- */
+.auth-container {
+    max-width: 400px;
+    margin: 80px auto;
+    background: #fff;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.auth-container h1 {
+    margin-bottom: 25px;
+    color: #2e7d32;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+button#login-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background-color: #43a047;
+    color: white;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+button#login-btn:hover {
+    background-color: #388e3c;
+}
+
+button#edit-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background-color: #43a047;
+    color: white;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+button#edit-btn:hover {
+    background-color: #388e3c;
+}
+button#save-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background-color: #43a047;
+    color: white;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+button#save-btn:hover {
+    background-color: #388e3c;
+}
+
+.error-message {
+    color: red;
+    font-size: 13px;
+    height: 14px;
+    margin-top: 3px;
+    display: block;
+}
+
+.register-link {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.message {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: 500;
+  transition: opacity 0.5s ease;
+}
+
+.message.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.hidden {
+  display: none;
+}
