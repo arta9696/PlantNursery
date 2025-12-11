@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PlantNurseryAPI.Database;
+using PlantNurseryAPI.DTO;
 using PlantNurseryAPI.Model;
 
 namespace PlantNurseryAPI.Controllers
@@ -28,8 +29,18 @@ namespace PlantNurseryAPI.Controllers
                 .Join(db.CartItems, cu => cu.Id, ci => ci.CustomerId, (cu, ci) => new
                 {
                     ci.CustomerId,
-                    ci.ProductId
-                }).Join(db.Products, cui => cui.ProductId, p => p.Id, (cui, p) => p).ToList();
+                    ci.ProductId,
+                    ci.Count,
+                }).Join(db.Products, cui => cui.ProductId, p => p.Id, (cui, p) => new ProductCount 
+                { 
+                    Id = p.Id, 
+                    Title = p.Title, 
+                    Description = p.Description,
+                    Price = p.Price,
+                    Image = p.Image,
+                    Count = cui.Count,
+                    IsActive = p.IsActive,
+                }).ToList();
                 _logger.LogInformation("Cart selected: " + account.AccountId);
                 return Ok(new { products = cartList });
             }

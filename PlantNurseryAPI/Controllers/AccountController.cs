@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PlantNurseryAPI.Database;
+using PlantNurseryAPI.DTO;
 using PlantNurseryAPI.Model;
 
 namespace PlantNurseryAPI.Controllers

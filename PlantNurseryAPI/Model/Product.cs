@@ -12,6 +12,8 @@ namespace PlantNurseryAPI.Model
         [Required]
         public float Price { get; set; }
         public string? Image { get; set; }
+        public bool IsActive { get; set; }
+        public bool IsDeleted { get; set; }
         [JsonIgnore]
         public List<CartItem> CartItems { get; } = [];
     }

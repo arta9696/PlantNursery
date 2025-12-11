@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PlantNurseryAPI.Database;
+using PlantNurseryAPI.DTO;
 using PlantNurseryAPI.Model;
 
 namespace PlantNurseryAPI.Controllers
@@ -54,8 +55,27 @@ namespace PlantNurseryAPI.Controllers
             }
         }
 
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id, ApplicationContext db)
+        {
+            try
+            {
+                var prod = db.Products.FirstOrDefault(x => x.Id == id);
+                if (prod == null) { _logger.LogWarning("Product not found: " + id); return NotFound(); }
+                prod.IsDeleted = true;
+                db.Products.Update(prod);
+                db.SaveChanges();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500, ex.ToString());
+            }
+        }
+
         [HttpPost("{id}/add")]
-        public IActionResult Add(int id, [FromBody] AccountIdClass account, ApplicationContext db)
+        public IActionResult Add(int id, [FromBody] AccountCountClass account, ApplicationContext db) //TODO узнать про "не более 10 товаров за раз"
         {
             //Code for adding product in cart
             try
@@ -67,7 +87,7 @@ namespace PlantNurseryAPI.Controllers
                 var customer = db.Customers.FirstOrDefault(x => x.AccountId == account.AccountId);
                 if (customer == null) { _logger.LogWarning("Account not found: " + account.AccountId); return NotFound("Customer"); }
 
-                db.CartItems.Add(new CartItem() { Product = product, Customer = customer });
+                db.CartItems.Add(new CartItem() { Product = product, Customer = customer, Count = account.Count });
                 db.SaveChanges();
                 _logger.LogInformation("Product added: " + id + "\nto: " + account.AccountId);
 
@@ -84,5 +104,110 @@ namespace PlantNurseryAPI.Controllers
                 return StatusCode(500, ex.ToString());
             }
         }
+
+        [HttpPost("add")]
+        public IActionResult Add([FromBody] Product product, ApplicationContext db)
+        {
+            try
+            {
+                db.Products.Add(product);
+                db.SaveChanges();
+                return Ok();
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex.Message);
+                return Conflict();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500, ex.ToString());
+            }
+        }
+
+        [HttpPut("{id}/update")]
+        public IActionResult Update(int id, [FromBody] Product product, ApplicationContext db)
+        {
+            try
+            {
+                db.Products.Update(product);
+                db.SaveChanges();
+                return Ok();
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500, ex.ToString());
+            }
+        }
+
+        [HttpPost("{id}/wait")]
+        public IActionResult Wait(int id, [FromBody] AccountIdClass AccountId, ApplicationContext db)
+        {
+            return StatusCode(500); //TODO какое поведение если кнопка уже была нажата?
+        }
+
+        [HttpPost("{id}/favorite")]
+        public IActionResult AddFavorite(int id, [FromBody] AccountIdClass AccountId, ApplicationContext db)
+        {
+            try
+            {
+                var account = db.Accounts.FirstOrDefault(x => x.Id == AccountId.AccountId);
+                if (account == null) { _logger.LogWarning("Account not found: " + AccountId.AccountId); return NotFound("Account"); }
+                var customer = db.Customers.First(x => x.AccountId == AccountId.AccountId);
+
+                var product = db.Products.FirstOrDefault(x => x.Id == id);
+                if (product == null) { _logger.LogWarning("Product not found: " + id); return NotFound("Product"); }
+
+                db.Favorites.Add(new Favorite() { CustomerId = customer.Id, ProductId = id });
+                db.SaveChanges();
+                return Ok();
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex.Message);
+                return Conflict();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500, ex.ToString());
+            }
+        }
+
+        [HttpDelete("{id}/favorite")]
+        public IActionResult DeleteFavorite(int id, [FromBody] AccountIdClass AccountId, ApplicationContext db)
+        {
+            try
+            {
+                var account = db.Accounts.FirstOrDefault(x => x.Id == AccountId.AccountId);
+                if (account == null) { _logger.LogWarning("Account not found: " + AccountId.AccountId); return NotFound("Account"); }
+                var customer = db.Customers.First(x => x.AccountId == AccountId.AccountId);
+
+                var product = db.Products.FirstOrDefault(x => x.Id == id);
+                if (product == null) { _logger.LogWarning("Product not found: " + id); return NotFound("Product"); }
+
+                var favorite = db.Favorites.FirstOrDefault(x => x.CustomerId == customer.Id && x.ProductId == id);
+                if (favorite == null) { _logger.LogWarning("Favorite not found"); return NotFound("Favorite"); }
+
+                db.Favorites.Remove(favorite);
+
+                db.SaveChanges();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500, ex.ToString());
+            }
+        }
+
+
     }
 }

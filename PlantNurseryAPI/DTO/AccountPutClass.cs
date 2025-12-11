@@ -1,4 +1,4 @@
-﻿namespace PlantNurseryAPI.Model
+﻿namespace PlantNurseryAPI.DTO
 {
     public class AccountPutClass
     {

@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PlantNurseryAPI.Database;
-using PlantNurseryAPI.Model;
-using System.Security.Principal;
+using PlantNurseryAPI.DTO;
 
 namespace PlantNurseryAPI.Controllers
 {
@@ -55,11 +53,15 @@ namespace PlantNurseryAPI.Controllers
                 customer.FullName = account.FullName;
                 customer.Address = account.Address;
                 db.Customers.Update(customer);
+                var newAccountData = db.Accounts.First(x => x.Id == account.AccountId);
+                newAccountData.Email = account.Email;
+                newAccountData.Password = account.Password;
+                db.Accounts.Update(newAccountData);
                 db.SaveChanges();
                 _logger.LogInformation("Profile updated: " + account.AccountId);
 
                 return Ok(account);
-            }
+            } 
             catch (DbUpdateException ex)
             {
                 _logger.LogError(ex.Message);
@@ -70,7 +72,28 @@ namespace PlantNurseryAPI.Controllers
                 _logger.LogError(ex.Message);
                 return StatusCode(500, ex.ToString());
             }
-            
+        }
+
+        [HttpPost("favorites")]
+        public IActionResult Favorites([FromBody] AccountIdClass AccountId, ApplicationContext db)
+        {
+            try
+            {
+                var account = db.Accounts.FirstOrDefault(x => x.Id == AccountId.AccountId);
+                if (account == null) { _logger.LogWarning("Account not found: " + AccountId.AccountId); return NotFound("Account"); }
+                var customer = db.Customers.First(x => x.AccountId == AccountId.AccountId);
+
+                var products = db.Favorites
+                    .Where(x => x.CustomerId == customer.Id)
+                    .Join(db.Products, f => f.ProductId, p => p.Id, (f, p) => p).ToList();
+
+                return Ok(new { products });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500, ex.ToString());
+            }
         }
     }
 }
