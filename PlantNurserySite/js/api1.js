@@ -7,10 +7,23 @@ async function getProducts() {
 }
 
 // --- Товар по ID ---
-async function getProductById(id) {
-  const res = await fetch(`${API_HOST}/products/${id}`);
-  if (!res.ok) throw new Error('Ошибка загрузки товара');
-  return res.json();
+async function getProductById(accountId = null, productId) {
+  const res = await fetch(`${API_HOST}/products/${productId}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ account_id: accountId })
+  });
+  
+  if(res.status === 200) {
+    return await res.json();
+  } else if (res.status === 404) {
+    alert("Товар не найден");
+  } else if (res.status === 500) {
+    alert("Внутренняя ошибка на стороне сервера")
+  } else {
+    alert("Ошибка загрузки товара");
+  }
+  return;
 }
 
 // --- Добавить в корзину ---

@@ -73,19 +73,22 @@ function renderMainPage() {
 //     return html;
 // }
 function renderWaitProducts() {
-    const waitProducts = JSON.parse(getWaitProducts() || "[]");
-    if (waitProducts.length === 0) {
-        document.getElementById("wait-products-container").innerHTML = "";
-        return;
+    const role = getRole();
+    if (role === ROLES.CUSTOMER) {
+        const waitProducts = JSON.parse(getWaitProducts() || "[]");
+        if (waitProducts.length === 0) {
+            document.getElementById("wait-products-container").innerHTML = "";
+            return;
+        }
+
+        let html = `<div class="wait-products-panel"><span>Товары в наличии:</span><ul>`;
+        waitProducts.forEach(product => {
+            html += `<li><a href="product.html?id=${product.id}">${product.title}</a></li>`;
+        });
+        html += `</ul></div>`;
+
+        document.getElementById("wait-products-container").innerHTML = html;
     }
-
-    let html = `<div class="wait-products-panel"><span>Товары в наличии:</span><ul>`;
-    waitProducts.forEach(product => {
-        html += `<li><a href="product.html?id=${product.id}">${product.title}</a></li>`;
-    });
-    html += `</ul></div>`;
-
-    document.getElementById("wait-products-container").innerHTML = html;
 }
 
 function initMenuButtons() {

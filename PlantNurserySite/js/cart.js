@@ -18,28 +18,85 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
 
+        let totalSum = 0; // итоговая сумма к заказу
         products.forEach((p) => {
+            const itemTotal = p.price * p.count;
+            totalSum += itemTotal;
+
             const item = document.createElement("div");
             item.classList.add("cart-item");
             item.innerHTML = `
                 <div class="cart-item-info">
-                <div class="cart-item-title">${p.title}</div>
+                <div class="cart-item-title">
+                    <a 
+                    href="product.html?id=${p.id}" 
+                    class="cart-item-title cart-item-link"
+                    >
+                    ${p.title}
+                    </a>
+                </div>
                 <div class="cart-item-price">${p.price} ₽</div>
                 </div>
+                <span class="cart-count">Количество: ${p.count} шт.</span>
                 <button class="delete-btn" data-id="${p.id}">Удалить</button>
             `;
             cartContainer.appendChild(item);
         });
 
-        // обработчик удаления
+        cartContainer.innerHTML += `<h3 id="cart-total">Итого: ${totalSum} ₽</h3>`; //итоговая цена
+
+        // обработчик удаления, где итого считается автоматически
         cartContainer.addEventListener("click", async (e) => {
             if (e.target.classList.contains("delete-btn")) {
-                const productId = e.target.dataset.id;
-                await removeFromCart(accountId, productId); //await - window.location.href дожидается выполнения removeFromCart 
-                window.location.href = "cart.html";
-                return;
+                const productId = Number(e.target.dataset.id);
+
+                try {
+                    await removeFromCart(accountId, productId);
+
+                    const cartItem = e.target.closest(".cart-item");
+
+                    const price = Number(
+                        cartItem.querySelector(".cart-item-price")
+                            .innerText.replace(/\D/g, "")
+                    );
+
+                    const count = Number(
+                        cartItem.querySelector(".cart-count")
+                            .innerText.replace(/\D/g, "")
+                    );
+
+                    const itemSum = price * count;
+
+                    totalSum -= itemSum;
+
+                    cartItem.remove();
+
+                    document.getElementById("cart-total").innerHTML =
+                        `Итого: ${totalSum} ₽`;
+
+                    if (!cartContainer.querySelector(".cart-item")) {
+                        cartContainer.innerHTML = "Ваша корзина пуста!";
+                        document.getElementById("cart-total").remove();
+                    }
+
+                } catch (err) {
+                    console.error(err);
+                    showNotification("Ошибка при удалении товара");
+                }
             }
         });
+
+
+
+        // обработчик удаления
+        // cartContainer.addEventListener("click", async (e) => {
+        //     if (e.target.classList.contains("delete-btn")) {
+        //         const productId = e.target.dataset.id;
+        //         await removeFromCart(accountId, productId); //await - window.location.href дожидается выполнения removeFromCart 
+        //         window.location.href = "cart.html";
+        //         return;
+        //     }
+        // });
 
         // // обработчик удаления - с доп окном подтверждения удаления
         // cartContainer.addEventListener("click", async (e) => {
