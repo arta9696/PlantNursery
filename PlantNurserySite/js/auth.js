@@ -33,6 +33,11 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await login(email, password);
 
             setAccountid(data.accountId); // сохранение account_id
+            
+            // Сохраняем wait_products в localStorage - для показа уведомлений
+            if (data.wait_products && Array.isArray(data.wait_products)) {
+                setWaitProducts(JSON.stringify(data.wait_products));
+            }
 
             //проверка роли
             const role = data.role; 

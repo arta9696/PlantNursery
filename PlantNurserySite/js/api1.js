@@ -24,6 +24,27 @@ async function addToCart(accountId, productId) {
   return res.status;
 }
 
+// --- Уведомление о поступлении ---
+async function notifyWhenInStock(accountId, productId) {
+    const res = await fetch(`${API_HOST}/products/${productId}/wait`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ accountId })
+    });
+
+    if (res.status === 200) {
+        alert("Вы успешно подписались на уведомление о поступлении товара!");
+    } else if (res.status === 409) {
+        alert("Вы уже подписаны на уведомление для этого товара.");
+    } else if (res.status === 500) {
+        alert("Произошла ошибка на сервере. Попробуйте позже.");
+    } else {
+        alert("Ошибка. Попробуйте еще раз.");
+    }
+
+    return res.status;
+}
+
 // --- Авторизация ---
 async function login(email, password) {
   const res = await fetch(`${API_HOST}/account/auth`, {

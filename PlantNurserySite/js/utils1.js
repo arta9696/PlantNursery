@@ -1,13 +1,13 @@
 // Роли пользователей
 const ROLES = {
-    GUEST: "Guest",
-    CUSTOMER: "Customer",
-    MANAGER: "Manager"
+    GUEST: "guest",
+    CUSTOMER: "customer",
+    MANAGER: "manager"
 };
 
 // Можно добавить и другие общие константы, например:
 const API_HOST = "/api"; 
-// const API_HOST = "http://demo1497191.mockable.io/api"; 
+// const API_HOST = "http://demo9118989.mockable.io/api"; 
 
 
 function showNotification(message) {

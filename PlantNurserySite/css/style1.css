@@ -94,6 +94,36 @@
     color: #2e4a2f;
 }
 
+/* -----------------------------------ПАНЕЛЬ УВЕДОМЛЕНИЙ */
+/* Отдельная панель уведомлений */
+.wait-products-panel {
+    margin: 10px auto;
+    padding: 10px 15px;
+    background-color: #fffae6; /* светлый желтый фон */
+    border: 1px solid #ffecb3;
+    border-radius: 6px;
+    max-width: 800px;
+}
+
+.wait-products-panel ul {
+    list-style: none;
+    padding: 0;
+    margin: 5px 0 0 0;
+}
+
+.wait-products-panel li {
+    margin: 3px 0;
+}
+
+.wait-products-panel a {
+    text-decoration: none;
+    color: #d35400;
+    font-weight: 500;
+}
+
+.wait-products-panel a:hover {
+    text-decoration: underline;
+}
 
 /* -----------------------------------КАТАЛОГ */
 body {
@@ -311,6 +341,105 @@ body {
 
 #addToCartBtn:hover {
     background-color: #1b5e20;
+}
+
+/* уведомить о поступлении */
+.out-of-stock {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+#notifyBtn {
+    width: 50%;
+    /*чтобы влезла кнопка избранное*/
+    background-color: #2e7d32;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 24px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+#notifyBtn:hover {
+    background-color: #1b5e20;
+}
+
+/* кнопки + и - и кол-во товара */
+/* Контейнер для управления количеством */
+.quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Расстояние между кнопками и полем */
+}
+
+/* Кнопки минус и плюс */
+.quantity-wrapper {
+    display: flex;
+    align-items: center; /* выравниваем по вертикали */
+    gap: 10px; /* расстояние между текстом и контролами */
+    margin-bottom: 10px; /* отступ снизу, если нужно */
+    margin-top: 150px;
+}
+
+.quantity-label {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* расстояние между кнопками и полем */
+}
+
+/* Кнопки */
+#minusBtn, #plusBtn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#minusBtn:hover, #plusBtn:hover {
+    background-color: #e0e0e0;
+}
+
+/* Поле с количеством */
+#quantityInput {
+    width: 50px;
+    height: 32px;
+    text-align: center;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: default;
+}
+
+/* Убираем стрелки у input type=number */
+#quantityInput::-webkit-inner-spin-button,
+#quantityInput::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#quantityInput {
+    -moz-appearance: textfield; /* Firefox */
 }
 
 /* ---------------------------- АВТОРИЗАЦИЯ */

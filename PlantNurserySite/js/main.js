@@ -17,6 +17,7 @@ function loadMenu() {
     const container = document.getElementById("menu-container");
     if (container) {
         menuHTML += renderMainPage();
+        //menuHTML += renderWaitProducts();
         menuHTML += `
             </nav>
             </header>
@@ -58,6 +59,35 @@ function renderMainPage() {
     return content;
 }
 
+// function renderWaitProducts() {
+//     const waitProducts = JSON.parse(getWaitProducts() || "[]");
+//     if (waitProducts.length === 0) return "";
+//     alert(waitProducts)
+
+//     let html = `<div class="wait-products-panel"><span>Товары в наличии:</span><ul>`;
+//     waitProducts.forEach(product => {
+//         html += `<li><a href="product.html?id=${product.id}">${product.title}</a></li>`;
+//     });
+
+//     html += `</ul></div>`;
+//     return html;
+// }
+function renderWaitProducts() {
+    const waitProducts = JSON.parse(getWaitProducts() || "[]");
+    if (waitProducts.length === 0) {
+        document.getElementById("wait-products-container").innerHTML = "";
+        return;
+    }
+
+    let html = `<div class="wait-products-panel"><span>Товары в наличии:</span><ul>`;
+    waitProducts.forEach(product => {
+        html += `<li><a href="product.html?id=${product.id}">${product.title}</a></li>`;
+    });
+    html += `</ul></div>`;
+
+    document.getElementById("wait-products-container").innerHTML = html;
+}
+
 function initMenuButtons() {
     document.getElementById("catalog-btn")?.addEventListener("click", () => {
         window.location.href = "catalog.html";
@@ -81,51 +111,8 @@ function initMenuButtons() {
 }
 
 // --- Запуск при загрузке страницы ---
-document.addEventListener("DOMContentLoaded", loadMenu);
-
-
-// === Меню ===
-// function renderMenu() {
-//     const menu = document.getElementById('main-menu');
-//     menu.innerHTML = '';
-
-//     const { role } = getUser();
-//     const menuItems = [];
-
-//     if (!role) {
-//         menuItems.push(
-//             { text: 'Каталог товаров', link: 'catalog.html' },
-//             { text: 'Войти', link: 'login.html' },
-//             { text: 'Зарегистрироваться', link: 'register.html' }
-//         );
-//     } else if (role === 'customer') {
-//         menuItems.push(
-//             { text: 'Каталог товаров', link: 'catalog.html' },
-//             { text: 'Корзина', link: 'cart.html' },
-//             { text: 'Мой профиль', link: 'profile.html' }
-//         );
-//     } else if (role === 'manager') {
-//         menuItems.push(
-//             { text: 'Каталог товаров', link: 'catalog.html' },
-//             { text: 'Выйти', link: '#', action: logout }
-//         );
-//     }
-
-//     menuItems.forEach(item => {
-//         const btn = document.createElement('a');
-//         btn.textContent = item.text;
-//         btn.href = item.link;
-//         if (item.action) btn.addEventListener('click', item.action);
-//         menu.appendChild(btn);
-//     });
-// }
-
-// function logout() {
-//     clearUser();
-//     showNotification('Вы вышли из аккаунта');
-//     setTimeout(() => window.location.href = 'catalog.html', 1000);
-// }
-// document.addEventListener('DOMContentLoaded', async () => {
-//   renderMenu();
-//   await loadCatalog();
-// });
+// document.addEventListener("DOMContentLoaded", loadMenu);
+document.addEventListener("DOMContentLoaded", () => {
+    loadMenu();
+    renderWaitProducts(); // рендерим уведомления отдельно
+});
