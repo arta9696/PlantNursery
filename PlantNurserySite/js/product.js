@@ -120,15 +120,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
 
         btn.addEventListener("click", async () => {
+            const count = Number(quantityInput.value);
             try {
-                const res = await addToCart(accountId, productId);
-                if (res === 200) {
-                    alert("Товар добавлен в корзину!");
-                } else if (res === 400) { //обработка повторного добавления товара 
-                    alert("Товар уже был добавлен в корзину!");
-                } else {
-                    alert("Товар уже добавлен в корзину или произошла ошибка.");
-                }
+                const res = await addToCart(accountId, productId, count);
             } catch (err) {
                 console.error(err);
                 alert("Ошибка при добавлении в корзину.");
