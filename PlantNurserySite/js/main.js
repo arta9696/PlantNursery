@@ -41,6 +41,7 @@ function renderMainPage() {
 
     if (role === ROLES.CUSTOMER) {
         content = `
+        <button id="favorite-btn">Избранное</button>
         <button id="cart-btn">Корзина</button>
         <button id="profile-btn">Мой профиль</button>
         <button id="logout-btn">Выход</button>
@@ -82,6 +83,9 @@ function renderWaitProducts() {
 function initMenuButtons() {
     document.getElementById("catalog-btn")?.addEventListener("click", () => {
         window.location.href = "catalog.html";
+    });
+    document.getElementById("favorite-btn")?.addEventListener("click", () => {
+        window.location.href = "favorites.html";
     });
     document.getElementById("cart-btn")?.addEventListener("click", () => {
         window.location.href = "cart.html";

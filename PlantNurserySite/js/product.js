@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     const params = new URLSearchParams(window.location.search);
-    const productId = params.get("id");
+    const productId = Number(params.get("id"));
 
     // const role = getRole();
     const accountId = getAccountId();
@@ -54,7 +54,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                                             <button id="plusBtn">+</button>
                                         </div>
                                     </div>
-                                    <button id="addToCartBtn">Добавить в корзину</button>
+                                    <div class="action-row">
+                                        <button id="addToCartBtn">Добавить в корзину</button>
+                                    </div>
                                 `
                 : `
                                     <p class="out-of-stock">Нет в наличии</p>
@@ -92,6 +94,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         const plusBtn = document.getElementById("plusBtn"); //кнопка увеличения кол-ва товара
         const quantityInput = document.getElementById("quantityInput"); //поле с числом товара
 
+        // Проверка роли
+        if (role !== ROLES.CUSTOMER) {
+            btn.addEventListener("click", () => {
+                alert("Необходимо выполнить вход в аккаунт.");
+            });
+            return;
+        }
+
+        // ЕСЛИ РОЛЬ = Покупатель
         // Проверка значения, которое Пользователи вручную вводят в числовой инпут quantityInput - нельзя ввести отрицаиельное или 0
         quantityInput.addEventListener("input", () => {
             let value = Number(quantityInput.value);
@@ -106,16 +117,47 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         });
 
+        // --- кнопка избранного только для покупателей ---
+        const favoriteBtn = document.createElement("button");
+        favoriteBtn.id = "favorite-btn";
+        favoriteBtn.className = "favorite-btn";
+        favoriteBtn.textContent = "♡";
 
-        // Проверка роли
-        if (role !== ROLES.CUSTOMER) {
-            btn.addEventListener("click", () => {
-                alert("Необходимо выполнить вход в аккаунт.");
-            });
-            return;
+        const actionRow = document.querySelector(".action-row");
+        actionRow.appendChild(favoriteBtn);
+
+        const favData = await getFavoriteProducts(accountId);
+        let isFavorite = favData.products.some(p => Number(p.id) === productId);
+
+        if (isFavorite) {
+            favoriteBtn.textContent = "♥";
+            favoriteBtn.classList.add("active");
         }
 
-        // Если роль = Покупатель
+        favoriteBtn.addEventListener("click", async () => {
+            try {
+                if (!isFavorite) {
+                    const res = await addToFavorite(accountId, productId);
+                    if (res === 200) {
+                        isFavorite = true;
+                        favoriteBtn.textContent = "♥";
+                        favoriteBtn.classList.add("active");
+                    }
+                } else {
+                    const res = await removeFromFavorite(accountId, productId);
+                    if (res === 200) {
+                        isFavorite = false;
+                        favoriteBtn.textContent = "♡";
+                        favoriteBtn.classList.remove("active");
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Ошибка при обновлении избранного");
+            }
+        });
+
+        // кнопки + и - для количества товара
         plusBtn.addEventListener("click", () => {
             let value = Number(quantityInput.value);
             if (value < maxCount) {

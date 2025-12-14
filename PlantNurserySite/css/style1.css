@@ -584,6 +584,58 @@ body {
     /* Firefox */
 }
 
+/* ИЗбранное: Добавить в избранное, удалить из избранного */
+/* контейнер кнопки избранного */
+.action-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;              /* расстояние между кнопками */
+}
+
+.favorite-btn {
+    background: white;
+    border: none;
+    border-radius: 50%;
+    width: 46px;
+    height: 46px;
+    font-size: 22px;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* наведение */
+.favorite-btn:hover {
+    transform: scale(1.12);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* пустое сердечко */
+.favorite-btn.not-favorite {
+    color: #bbb;
+}
+
+/* в избранном */
+.favorite-btn.is-favorite {
+    color: #d32f2f;
+}
+
+/* анимация при клике */
+.favorite-btn.animate {
+    animation: heart-pop 0.35s ease;
+}
+
+@keyframes heart-pop {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.4); }
+    100% { transform: scale(1); }
+} 
+
 /* ---------------------------- АВТОРИЗАЦИЯ */
 /* ---------- Авторизация ---------- */
 .auth-container {
@@ -826,4 +878,76 @@ button#save-btn:hover {
 
 .hidden {
     display: none;
+}
+
+/* -----------------ИЗБРАННОЕ */
+/* Контейнер для избранного */
+.favorites-container {
+    max-width: 900px;
+    margin: 40px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Одиночный товар в избранном */
+.favorite-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    /* background-color: #ffffff; */
+    /* background-color: #eefdeb; */
+    margin-bottom: 10px;
+    background-color: #dbecd8;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.favorite-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+/* Блок с названием и ценой */
+.favorite-info {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Название товара */
+.favorite-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #2f5130;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.favorite-title:hover {
+    color: #2e7d32;
+}
+
+/* Цена товара */
+.favorite-price {
+    font-size: 16px;
+    font-weight: 600;
+    color: #388e3c;
+    margin-top: 4px;
+}
+
+/* Сообщения */
+.empty-message {
+    text-align: center;
+    font-size: 18px;
+    color: #2f5130;
+    margin-top: 40px;
+}
+
+.error-message {
+    text-align: center;
+    font-size: 16px;
+    color: #d32f2f;
+    margin-top: 40px;
 }

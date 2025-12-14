@@ -64,4 +64,16 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
     });
+
+    function showSuccess(text) {
+        successMsg.textContent = text;
+        successMsg.classList.remove("hidden");
+        errorMsg.classList.add("hidden");
+    }
+
+    function showError(text) {
+        errorMsg.textContent = text;
+        errorMsg.classList.remove("hidden");
+        successMsg.classList.add("hidden");
+    }
 });
