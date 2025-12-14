@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     window.location.href = "catalog.html";
                 }, 1500);
             } else if (resStatus === 409) {
-                showError("Товар, с таким названием уже есть в каталоге!");
+                showError("Товар с таким названием уже есть в каталоге!");
             } else if (resStatus === 500) {
                 showError("Внутренняя ошибка сервера. Попробуйте позже.");
             } else {
@@ -64,38 +64,4 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
     });
-
-    function showSuccess(text) {
-        successMsg.textContent = text;
-        successMsg.classList.remove("hidden");
-        errorMsg.classList.add("hidden");
-    }
-
-    function showError(text) {
-        errorMsg.textContent = text;
-        errorMsg.classList.remove("hidden");
-        successMsg.classList.add("hidden");
-    }
-
-    function isValidImageUrl(url) {
-        try {
-            const parsedUrl = new URL(url);
-            return /\.(jpg|jpeg|png|webp|gif)$/i.test(parsedUrl.pathname);
-        } catch {
-            return false;
-        }
-    }
-
-    // function isValidImageUrl(url) {
-    //     try {
-    //         alert("test");
-    //         alert("url = [" + url + "]");
-    //         let a = new URL(url);
-    //         alert("ok");
-    //         return true;  // НЕ проверяем расширение
-    //     } catch (e) {
-    //         alert("error: " + e.message);
-    //         return false;
-    //     }
-    // }
 });

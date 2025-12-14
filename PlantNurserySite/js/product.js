@@ -1,8 +1,20 @@
 document.addEventListener("DOMContentLoaded", async () => {
+    const role = getRole();
+
+    if (role === ROLES.MANAGER) {
+        const btn = document.getElementById("edit-product-btn");
+        btn.classList.remove("hidden");
+
+        btn.addEventListener("click", () => {
+            const productId = getProductIdFromURL(); //из URL получаем id товара
+            window.location.href = `edit-product.html?id=${productId}`;
+        });
+    }
+
     const params = new URLSearchParams(window.location.search);
     const productId = params.get("id");
 
-    const role = getRole();
+    // const role = getRole();
     const accountId = getAccountId();
 
     try {
@@ -11,10 +23,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         const isInStock = product.isActive === true;                    // в наличии или нет
         const maxCount =                                                // максимальное число, которе можно добавить в корзину
             product.allowedCount && product.allowedCount > 0
-            ? product.allowedCount 
-            : 1;
+                ? product.allowedCount
+                : 1;
 
-            document.getElementById("item-container").innerHTML = `
+        document.getElementById("item-container").innerHTML = `
                 <div class="item-horizontal">
                     <div class="item-image">
                         <img src="${product.image?.url || product.image}" alt="${product.title}">
@@ -25,9 +37,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                         <p>${product.description}</p>
                         <p class="item-price"><b>Цена:</b> ${product.price} руб.</p>
 
-                        ${
-                            isInStock
-                                ? `
+                        ${isInStock
+                ? `
                                     <div class="quantity-wrapper">
                                         <span class="quantity-label">Количество товара</span>
                                         <div class="quantity-control">
@@ -45,11 +56,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                                     </div>
                                     <button id="addToCartBtn">Добавить в корзину</button>
                                 `
-                                : `
+                : `
                                     <p class="out-of-stock">Нет в наличии</p>
                                     <button id="notifyBtn">Уведомить о поступлении</button>
                                 `
-                        }
+            }
                     </div>
                 </div>
             `;
@@ -63,7 +74,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     alert("Войдите в аккаунт, чтобы получать уведомления");
                     return;
                 }
-                
+
                 try {
                     await notifyWhenInStock(accountId, productId);
                 } catch (error) {

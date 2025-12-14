@@ -138,6 +138,7 @@ async function removeFromCart(accountId, productId) {
   alert(message);
 }
 
+// получить данные профиля
 async function getProfile(accountId) {
   const res = await fetch(`${API_HOST}/customer/profile`, {
     method: 'POST',
@@ -151,6 +152,7 @@ async function getProfile(accountId) {
   return res.json();
 }
 
+// обновить данные профиля
 async function updateProfile(accountId, email, fullName, address, password) {
   const res = await fetch(`${API_HOST}/customer/profile`, {
     method: "PUT",
@@ -165,7 +167,7 @@ async function updateProfile(accountId, email, fullName, address, password) {
   return res.json();
 }
 
-// --- Добавить товар в каталог ---
+// Добавить товар в каталог 
 async function addProduct(title, description, price, image, isActive) {
   const res = await fetch(`${API_HOST}/products/add`, {
     method: 'POST',
@@ -184,6 +186,18 @@ async function addProduct(title, description, price, image, isActive) {
   // }
   return res.status;
 }
+
+// Редактировать товар
+async function editProduct(productId, title, description, price, image, isActive) {
+    const res = await fetch(`${API_HOST}/products/${productId}/update`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, description, price, image, isActive })
+    });
+
+    return res.status;
+}
+
 
 function decodePossiblyEncodedString(encodedString) {
   try {
