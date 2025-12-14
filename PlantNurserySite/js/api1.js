@@ -13,8 +13,8 @@ async function getProductById(accountId = null, productId) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ account_id: accountId })
   });
-  
-  if(res.status === 200) {
+
+  if (res.status === 200) {
     return await res.json();
   } else if (res.status === 404) {
     alert("Товар не найден");
@@ -165,6 +165,26 @@ async function updateProfile(accountId, email, fullName, address, password) {
   return res.json();
 }
 
+// --- Добавить товар в каталог ---
+async function addProduct(title, description, price, image, isActive) {
+  const res = await fetch(`${API_HOST}/products/add`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title, description, price, image, isActive })
+  });
+  // if (res.status === 200) {
+  //   alert("Товар добавлен в каталог!");
+  //   window.location.href = "catalog.html";
+  // } else if (res.status === 409) {
+  //   alert("Товар, с таким названием уже есть в каталоге!");
+  // } else if (res.status === 500) {
+  //   alert("Внутренняя ошибка сервера. Попробуйте позже.");
+  // } else {
+  //   alert("Произошла ошибка при добавлении товара.");
+  // }
+  return res.status;
+}
+
 function decodePossiblyEncodedString(encodedString) {
   try {
     // First, try URL decoding
@@ -203,14 +223,3 @@ function decodePossiblyEncodedString(encodedString) {
     return encodedString; // Or throw an error, or return null
   }
 }
-
-// // --- Регистрация ---
-// export async function register(email, password) {
-//   const res = await fetch(`${API_HOST}/account/register`, {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify({ email, password })
-//   });
-//   if (!res.ok) throw new Error('Ошибка регистрации');
-//   return res.json();
-// }

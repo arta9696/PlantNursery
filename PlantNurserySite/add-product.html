@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <script src="./js/main.js"></script>
+    <script src="./js/utils1.js"></script>
+    <script src="./storage/storage1.js"></script>
+    <script src="./js/api1.js"></script>
+    <script src="./js/add-product.js" defer></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Сангрия</title>
+    <link rel="stylesheet" href="css/style1.css" />
+</head>
+
+<body>
+    <div id="menu-container"></div> <!-- Контейнер меню -->
+
+    <div class="add-product-wrapper">
+        <form class="add-product-form">
+            <h2>Добавить новый товар</h2>
+
+            <label>Название товара</label>
+            <input type="text" id="title">
+
+            <label>Описание товара</label>
+            <textarea id="description"></textarea>
+
+            <label>Цена (₽)</label>
+            <input type="text" id="price"> 
+
+            <label>Ссылка на изображение</label>
+            <input type="text" id="image">
+
+            <label class="checkbox-row">
+                <input type="checkbox" id="isActive">
+                В наличии
+            </label>
+
+            <button type="submit" id="add-btn">Добавить товар</button>
+
+            <p class="form-message success hidden"></p>
+            <p class="form-message error hidden"></p>
+        </form>
+    </div>
+
+    <p id="message"></p>
+</body>
+
+</html>

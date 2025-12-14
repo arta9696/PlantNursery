@@ -59,19 +59,7 @@ function renderMainPage() {
     return content;
 }
 
-// function renderWaitProducts() {
-//     const waitProducts = JSON.parse(getWaitProducts() || "[]");
-//     if (waitProducts.length === 0) return "";
-//     alert(waitProducts)
-
-//     let html = `<div class="wait-products-panel"><span>Товары в наличии:</span><ul>`;
-//     waitProducts.forEach(product => {
-//         html += `<li><a href="product.html?id=${product.id}">${product.title}</a></li>`;
-//     });
-
-//     html += `</ul></div>`;
-//     return html;
-// }
+// для отображения уведомления о поступлении товаров (товары в наличии)
 function renderWaitProducts() {
     const role = getRole();
     if (role === ROLES.CUSTOMER) {
