@@ -9,6 +9,7 @@ namespace PlantNurseryAPI.Model
         public int CustomerId { get; set; }
         [ForeignKey(nameof(Product))]
         public int ProductId { get; set; }
+        public bool IsNotified { get; set; }
 
         public Customer Customer { get; set; } = null!;
         public Product Product { get; set; } = null!;

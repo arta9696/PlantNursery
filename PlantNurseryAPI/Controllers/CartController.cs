@@ -23,6 +23,9 @@ namespace PlantNurseryAPI.Controllers
             //Code for getting all products in cart
             try
             {
+                var accountSelect = db.Accounts.FirstOrDefault(x => x.Id == account.AccountId);
+                if (accountSelect == null) { _logger.LogWarning("Account not found: " + account.AccountId); return NotFound(); }
+
                 _logger.LogInformation("Starting cart select of: " + account.AccountId);
                 var cartList = db.Customers
                 .Where(x => x.AccountId == account.AccountId)

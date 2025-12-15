@@ -50,7 +50,7 @@ namespace PlantNurseryAPI.Controllers
         }
 
         [HttpPost("auth")]
-        public IActionResult Auth([FromBody] AccountNew account, ApplicationContext db)
+        public async Task<IActionResult> Auth([FromBody] AccountNew account, ApplicationContext db)
         {
             //Code for checking account
             try
@@ -60,7 +60,21 @@ namespace PlantNurseryAPI.Controllers
                 if (authAccount == null) { _logger.LogWarning("Account not found: " + account.Email); return NotFound(); }
                 if (authAccount.Password != account.Password) { _logger.LogWarning("Account password wrong: " + account.Email); return Unauthorized(); }
                 _logger.LogInformation("Authorized: " + account.Email);
-                return Ok(new AccountIdClass() { AccountId = authAccount.Id, Role = db.Roles.First(x => x.Id == authAccount.RoleId).Name });
+
+                var customer = db.Customers.FirstOrDefault(x => x.AccountId == authAccount.Id);
+                var waitedProducts = db.WaitProducts
+                    .Where(x => x.CustomerId == customer.Id && x.IsNotified == false)
+                    .Join(db.Products, x => x.ProductId, p => p.Id, (x, p) => p)
+                    .ToList();
+                 await db.WaitProducts.Where(x => x.CustomerId == customer.Id && x.IsNotified == false).ForEachAsync(x => { x.IsNotified = true; });
+                db.SaveChanges();
+
+                return Ok(new 
+                { 
+                    AccountId = authAccount.Id, 
+                    Role = db.Roles.First(x => x.Id == authAccount.RoleId).Name,
+                    waitProducts = new List<Product>(waitedProducts)
+                });
             }
             catch (Exception ex)
             {
