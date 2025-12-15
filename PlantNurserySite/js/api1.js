@@ -189,107 +189,116 @@ async function addProduct(title, description, price, image, isActive) {
 
 // Редактировать товар
 async function editProduct(productId, title, description, price, image, isActive) {
-    const res = await fetch(`${API_HOST}/products/${productId}/update`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, description, price, image, isActive })
-    });
+  const res = await fetch(`${API_HOST}/products/${productId}/update`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title, description, price, image, isActive })
+  });
 
-    return res.status;
+  return res.status;
+}
+
+// Удалить товар
+async function deleteProduct(productId) {
+  const res = await fetch(`${API_HOST}/products/${productId}`, {
+    method: "DELETE"
+  });
+
+  return res.status;
 }
 
 // Получить историю заказов 
 async function getOrdersHistory(accountId) {
-    const res = await fetch(`${API_HOST}/orders`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            account_id: accountId
-        })
-    });
+  const res = await fetch(`${API_HOST}/orders`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      account_id: accountId
+    })
+  });
 
-    if (res.status === 404) {
-        throw new Error("Покупатель не найден");
-    }
+  if (res.status === 404) {
+    throw new Error("Покупатель не найден");
+  }
 
-    if (res.status !== 200) {
-        throw new Error("Ошибка сервера");
-    }
+  if (res.status !== 200) {
+    throw new Error("Ошибка сервера");
+  }
 
-    const data = await res.json();
-    return data.orders;
+  const data = await res.json();
+  return data.orders;
 }
 
 // Получить список избранного 
 async function getFavoriteProducts(accountId) {
-    const res = await fetch(`${API_HOST}/customer/favorites`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ accountId })
-    });
+  const res = await fetch(`${API_HOST}/customer/favorites`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ accountId })
+  });
 
-    if (res.status === 200) {
-      return res.json();
-    } else if (res.status === 404) {
-      alert("Покупатель не найден.");
-    } else if (res.status === 500) {
-      alert("Ошибка сервера. Попробуйте позже.");
-    } else {
-      alert("Произошла ошибка при отображении товаров.");
-    }
-    return;
+  if (res.status === 200) {
+    return res.json();
+  } else if (res.status === 404) {
+    alert("Покупатель не найден.");
+  } else if (res.status === 500) {
+    alert("Ошибка сервера. Попробуйте позже.");
+  } else {
+    alert("Произошла ошибка при отображении товаров.");
+  }
+  return;
 }
 
 // Добавить товар в избранное 
 async function addToFavorite(accountId, productId) {
-    const res = await fetch(`${API_HOST}/products/${productId}/favorite`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ accountId })
-    });
+  const res = await fetch(`${API_HOST}/products/${productId}/favorite`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ accountId })
+  });
 
-    if (res.status === 200) {
-      return res.status;
-    } else if (res.status === 404) {
-      alert("Покупатель или товар не найден.");
-    } else if (res.status === 409) {
-      alert("Этот товар уже в избранном.");
-    } else if (res.status === 500) {
-      alert("Ошибка сервера. Попробуйте позже.");
-    } else {
-      alert("Произошла ошибка при отображении товаров.");
-    }
+  if (res.status === 200) {
     return res.status;
+  } else if (res.status === 404) {
+    alert("Покупатель или товар не найден.");
+  } else if (res.status === 409) {
+    alert("Этот товар уже в избранном.");
+  } else if (res.status === 500) {
+    alert("Ошибка сервера. Попробуйте позже.");
+  } else {
+    alert("Произошла ошибка при отображении товаров.");
+  }
+  return res.status;
 }
 
 // Удалить товар из избранного 
 async function removeFromFavorite(accountId, productId) {
-    const res = await fetch(`${API_HOST}/products/${productId}/favorite`, {
-        method: "DELETE",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ accountId })
-    });
+  const res = await fetch(`${API_HOST}/products/${productId}/favorite`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ accountId })
+  });
 
-    if (res.status === 200) {
-      return res.status;
-    } else if (res.status === 404) {
-      alert("Покупатель или товар не найден.");
-    } else if (res.status === 409) {
-      alert("Этого товара нет в избранном.");
-    } else if (res.status === 500) {
-      alert("Ошибка сервера. Попробуйте позже.");
-    } else {
-      alert("Произошла ошибка при отображении товаров.");
-    }
+  if (res.status === 200) {
     return res.status;
+  } else if (res.status === 404) {
+    alert("Покупатель или товар не найден.");
+  } else if (res.status === 409) {
+    alert("Этого товара нет в избранном.");
+  } else if (res.status === 500) {
+    alert("Ошибка сервера. Попробуйте позже.");
+  } else {
+    alert("Произошла ошибка при отображении товаров.");
+  }
+  return res.status;
 }
 
 

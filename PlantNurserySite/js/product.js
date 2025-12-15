@@ -2,12 +2,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     const role = getRole();
 
     if (role === ROLES.MANAGER) {
-        const btn = document.getElementById("edit-product-btn");
-        btn.classList.remove("hidden");
+        // Редактировать товар
+        const btn_edit = document.getElementById("edit-product-btn");
+        btn_edit.classList.remove("hidden");
 
-        btn.addEventListener("click", () => {
+        btn_edit.addEventListener("click", () => {
             const productId = getProductIdFromURL(); //из URL получаем id товара
             window.location.href = `edit-product.html?id=${productId}`;
+        });
+
+        // Удалить товар
+        const btn_del = document.getElementById("del-product-btn");
+        btn_del.classList.remove("hidden");
+
+        btn_del.addEventListener("click", () => {
+            const productId = getProductIdFromURL(); //из URL получаем id товара
+            const productTitle = document.querySelector(".item-info h2")?.textContent || "этот товар"; // Название товара
+            createConfirmationModal(productId, productTitle);
         });
     }
 
