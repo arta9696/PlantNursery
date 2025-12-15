@@ -214,21 +214,21 @@ async function getOrdersHistory(accountId) {
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({
-      account_id: accountId
-    })
+    body: JSON.stringify({ accountId })
   });
 
-  if (res.status === 404) {
-    throw new Error("Покупатель не найден");
+  if (res.status === 200) {
+    const data = await res.json();
+    return data.orders;
+  } else if (res.status === 404) {
+    alert("Покупатель не найден");
+  } else if (res.status === 500) {
+    alert("Ошибка сервера");
+  } else {
+    alert("Произошла ошибка! Попробуйте обновить страницу.");
   }
 
-  if (res.status !== 200) {
-    throw new Error("Ошибка сервера");
-  }
-
-  const data = await res.json();
-  return data.orders;
+  return;
 }
 
 // Получить список избранного 

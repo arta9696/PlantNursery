@@ -43,6 +43,7 @@ function renderMainPage() {
         content = `
         <button id="favorite-btn">Избранное</button>
         <button id="cart-btn">Корзина</button>
+        <button id="history-order-btn">История заказов</button>
         <button id="profile-btn">Мой профиль</button>
         <button id="logout-btn">Выход</button>
         `;
@@ -81,6 +82,15 @@ function renderWaitProducts() {
 }
 
 function initMenuButtons() {
+    // Логотип кликабельный
+    const logo = document.querySelector('.logo');
+    if (logo) {
+        logo.style.cursor = 'pointer';
+        logo.addEventListener('click', () => {
+            window.location.href = 'catalog.html';
+        });
+    }
+
     document.getElementById("catalog-btn")?.addEventListener("click", () => {
         window.location.href = "catalog.html";
     });
@@ -89,6 +99,9 @@ function initMenuButtons() {
     });
     document.getElementById("cart-btn")?.addEventListener("click", () => {
         window.location.href = "cart.html";
+    });
+    document.getElementById("history-order-btn")?.addEventListener("click", () => {
+        window.location.href = "orders.html";
     });
     document.getElementById("profile-btn")?.addEventListener("click", () => {
         window.location.href = "profile.html";
