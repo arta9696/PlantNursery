@@ -11,7 +11,7 @@ async function getProductById(accountId = null, productId) {
   const res = await fetch(`${API_HOST}/products/${productId}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ account_id: accountId })
+    body: JSON.stringify({ accountId })
   });
 
   if (res.status === 200) {
