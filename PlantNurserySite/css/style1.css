@@ -66,12 +66,14 @@
     padding: 20px;
     border-bottom: 4px solid #9ebc9a;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap;     /* чтобы при узком экране переносилось */
 }
 
 /* кнопки навигации */
 .main-nav button {
-    min-width: 150px;
-    /* 🔹 одинаковая ширина */
+    /* min-width: 150px; */
+    flex-wrap: wrap;     /* чтобы при узком экране переносилось */
+    min-width: 130px;
     text-align: center;
     margin: 0 5px;
     padding: 8px 15px;
@@ -1565,7 +1567,7 @@ button#save-btn:hover {
     }
 }
 
-/* Основные стили корзины */
+/* Создать заказ */
 .add-order-cart-container {
     max-width: 800px;
     margin: 20px auto;
@@ -1901,4 +1903,38 @@ button#save-btn:hover {
 
 .add-order-modal {
   overflow-x: hidden;
+}
+
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* ---------ПОИСК */
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.search-container input {
+  padding: 6px 10px;
+}
+
+/* фикс для кнопки поиска */
+.search-container #search-btn {
+  flex: 0 0 auto;          /* НЕ растягиваться */
+  width: 34px;             /* сделай под высоту инпута */
+  height: 34px;
+  padding: 0;
+  min-width: 0;            /* на случай общих стилей */
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;    /* центрируем лупу */
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  font-size: 18px;
 }

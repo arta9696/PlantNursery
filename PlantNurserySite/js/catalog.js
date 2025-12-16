@@ -14,33 +14,96 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 // === Каталог ===
+// async function loadCatalog() {
+//     const list = document.getElementById('catalog-container');
+//     list.innerHTML = '<p>Загрузка товаров...</p>';
+
+//     try {
+//         const products = await getProducts();
+//         list.innerHTML = '';
+
+//         products.forEach((p) => {
+//             const card = document.createElement("div");
+//             card.className = "product-card";
+
+//             // содержит описание
+//             // card.innerHTML = `
+//             //     <img src="${p.image}" alt="${p.title}" class="product-image">
+//             //     <h3 class="product-title">${p.title}</h3>
+//             //     <p class="product-desc">${p.description}</p>
+//             //     <p class="product-price">${p.price} ₽</p>
+//             //     `;
+
+//             card.innerHTML = `
+//                 <img src="${decodePossiblyEncodedString(p.image)}" alt="${p.title}" class="product-image">
+//                 <h3 class="product-title">${p.title}</h3>
+//                 <p class="product-price">${p.price} ₽</p>
+//                 `;
+
+//             // обработчик клика на названии
+//             card.querySelector(".product-title").addEventListener("click", () => {
+//                 window.location.href = `product.html?id=${p.id}`;
+//             });
+
+//             list.appendChild(card);
+//         });
+//     } catch (err) {
+//         list.innerHTML = `<p class="error">Ошибка загрузки каталога</p>`;
+//     }
+// }
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const role = getRole();
+
+    if (role === ROLES.MANAGER) {
+        const btn = document.getElementById("add-product-btn");
+        btn.classList.remove("hidden");
+
+        btn.addEventListener("click", () => {
+            window.location.href = "add-product.html";
+        });
+    }
+    
+    await loadCatalog();
+});
+
+// === Каталог ===
 async function loadCatalog() {
     const list = document.getElementById('catalog-container');
     list.innerHTML = '<p>Загрузка товаров...</p>';
 
     try {
         const products = await getProducts();
+
+        const params = new URLSearchParams(window.location.search);
+        const searchQuery = params.get("search");
+
+        let filteredProducts = products;
+
+        if (searchQuery) {
+            const query = searchQuery.toLowerCase();
+            filteredProducts = products.filter(p =>
+                p.title.toLowerCase().includes(query)
+            );
+        }
+
         list.innerHTML = '';
 
-        products.forEach((p) => {
+        if (filteredProducts.length === 0) {
+            list.innerHTML = `<p>Такого товара нет в каталоге</p>`;
+            return;
+        }
+
+        filteredProducts.forEach((p) => {
             const card = document.createElement("div");
             card.className = "product-card";
-
-            // содержит описание
-            // card.innerHTML = `
-            //     <img src="${p.image}" alt="${p.title}" class="product-image">
-            //     <h3 class="product-title">${p.title}</h3>
-            //     <p class="product-desc">${p.description}</p>
-            //     <p class="product-price">${p.price} ₽</p>
-            //     `;
 
             card.innerHTML = `
                 <img src="${decodePossiblyEncodedString(p.image)}" alt="${p.title}" class="product-image">
                 <h3 class="product-title">${p.title}</h3>
                 <p class="product-price">${p.price} ₽</p>
-                `;
+            `;
 
-            // обработчик клика на названии
             card.querySelector(".product-title").addEventListener("click", () => {
                 window.location.href = `product.html?id=${p.id}`;
             });

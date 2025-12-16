@@ -10,77 +10,63 @@ function loadMenu() {
             <span class="logo-subtitle">питомник растений</span>
         </div>
         <nav class="main-nav">
+            <div class="search-container">
+                <input
+                    type="text"
+                    id="search-input"
+                    placeholder="Поиск товара"
+                />
+                <button id="search-btn">🔍</button>
+            </div>
             <button id="catalog-btn">Каталог</button>
+
+            
     `;
 
-    // если на странице есть контейнер — вставляем туда меню
     const container = document.getElementById("menu-container");
     if (container) {
         menuHTML += renderMainPage();
-        //menuHTML += renderWaitProducts();
         menuHTML += `
             </nav>
             </header>
         `;
         container.innerHTML = menuHTML;
     }
+
     initMenuButtons();
-    // если нет контейнера — ничего не делаем
 }
 
-// --- Рендеринг главной страницы ---
+// --- Рендеринг кнопок по ролям ---
 function renderMainPage() {
     const role = getRole();
     let content = '';
+
     if (role === ROLES.GUEST) {
         content = `
-        <button id="auth-btn">Войти</button>
-        <button id="register-btn">Регистрация</button>
+            <button id="auth-btn">Войти</button>
+            <button id="register-btn">Регистрация</button>
         `;
     }
 
     if (role === ROLES.CUSTOMER) {
         content = `
-        <button id="favorite-btn">Избранное</button>
-        <button id="cart-btn">Корзина</button>
-        <button id="history-order-btn">История заказов</button>
-        <button id="profile-btn">Мой профиль</button>
-        <button id="logout-btn">Выход</button>
+            <button id="favorite-btn">Избранное</button>
+            <button id="cart-btn">Корзина</button>
+            <button id="profile-btn">Мой профиль</button>
+            <button id="logout-btn">Выход</button>
         `;
     }
 
     if (role === ROLES.MANAGER) {
         content = `
-        <button id="logout-btn">Выход</button>
+            <button id="logout-btn">Выход</button>
         `;
-        // window.location.href = 'catalog.html'; // Менеджера сразу перекидываем в каталог
-        //return;
     }
 
-    // main.innerHTML = content;
     return content;
 }
 
-// для отображения уведомления о поступлении товаров (товары в наличии)
-function renderWaitProducts() {
-    const role = getRole();
-    if (role === ROLES.CUSTOMER) {
-        const waitProducts = JSON.parse(getWaitProducts() || "[]");
-        if (waitProducts.length === 0) {
-            document.getElementById("wait-products-container").innerHTML = "";
-            return;
-        }
-
-        let html = `<div class="wait-products-panel"><span>Товары в наличии:</span><ul>`;
-        waitProducts.forEach(product => {
-            html += `<li><a href="product.html?id=${product.id}">${product.title}</a></li>`;
-        });
-        html += `</ul></div>`;
-
-        document.getElementById("wait-products-container").innerHTML = html;
-    }
-}
-
+// --- Кнопки меню ---
 function initMenuButtons() {
     // Логотип кликабельный
     const logo = document.querySelector('.logo');
@@ -116,11 +102,19 @@ function initMenuButtons() {
         clearAccount();
         window.location.href = "catalog.html";
     });
+
+    // 🔍 ПОИСК
+    document.getElementById("search-btn")?.addEventListener("click", () => {
+        const input = document.getElementById("search-input");
+        const query = input.value.trim();
+
+        if (!query) return;
+
+        window.location.href = `catalog.html?search=${encodeURIComponent(query)}`;
+    });
 }
 
-// --- Запуск при загрузке страницы ---
-// document.addEventListener("DOMContentLoaded", loadMenu);
 document.addEventListener("DOMContentLoaded", () => {
     loadMenu();
-    renderWaitProducts(); // рендерим уведомления отдельно
+    renderWaitProducts();
 });
