@@ -25,7 +25,7 @@ namespace PlantNurseryAPI.Controllers
             try
             {
                 _logger.LogInformation("Starting products select");
-                var products = db.Products.ToList();
+                var products = db.Products.OrderBy(p=>p.Id).ToList();
                 _logger.LogInformation("Products selected");
                 return Ok(new { products });
             }
@@ -36,8 +36,8 @@ namespace PlantNurseryAPI.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        public IActionResult Get(int id, ApplicationContext db)
+        [HttpPost("{id}")]
+        public IActionResult Get(int id, [FromBody] AccountIdClass? AccountId, ApplicationContext db)
         {
             //Code for getting product by id
             try
@@ -46,7 +46,25 @@ namespace PlantNurseryAPI.Controllers
                 var product = db.Products.FirstOrDefault(x => x.Id == id);
                 if (product == null) { _logger.LogWarning("Product not found: " + id); return NotFound(); }
                 _logger.LogInformation("Product selected: " + id);
-                return Ok(product);
+
+                Account? accountSelect = null;
+                if (AccountId != null)
+                {
+                    accountSelect = db.Accounts.FirstOrDefault(x => x.Id == AccountId.AccountId);
+                }
+                
+                if (AccountId == null || accountSelect == null || accountSelect.RoleId != db.Roles.First(x => x.Name == "Customer").Id)
+                {
+                    return Ok(product);
+                }
+                var customer = db.Customers.First(x => x.AccountId == AccountId.AccountId);
+                var cartItem = db.CartItems.FirstOrDefault(x => x.CustomerId == customer.Id && x.ProductId == id);
+                int count = 0;
+                if (cartItem != null)
+                {
+                    count = 10 - cartItem.Count;
+                }
+                return Ok(new ProductAllowedCount(product, count));
             }
             catch (Exception ex)
             {
@@ -75,7 +93,7 @@ namespace PlantNurseryAPI.Controllers
         }
 
         [HttpPost("{id}/add")]
-        public IActionResult Add(int id, [FromBody] AccountCountClass account, ApplicationContext db) //TODO узнать про "не более 10 товаров за раз"
+        public IActionResult Add(int id, [FromBody] AccountCountClass account, ApplicationContext db)
         {
             //Code for adding product in cart
             try
@@ -87,11 +105,23 @@ namespace PlantNurseryAPI.Controllers
                 var customer = db.Customers.FirstOrDefault(x => x.AccountId == account.AccountId);
                 if (customer == null) { _logger.LogWarning("Account not found: " + account.AccountId); return NotFound("Customer"); }
 
-                db.CartItems.Add(new CartItem() { Product = product, Customer = customer, Count = account.Count });
-                db.SaveChanges();
-                _logger.LogInformation("Product added: " + id + "\nto: " + account.AccountId);
+                var cartItem = db.CartItems.FirstOrDefault(x => x.CustomerId == customer.Id && x.ProductId == id);
+                if(cartItem == null)
+                {
+                    db.CartItems.Add(new CartItem() { Product = product, Customer = customer, Count = account.Count });
+                    db.SaveChanges();
+                    _logger.LogInformation("Product added: " + id + "\nto: " + account.AccountId);
+                }
+                else
+                {
+                    if (cartItem.Count + account.Count > 10) return BadRequest();
+                    cartItem.Count += account.Count;
+                    db.Update(cartItem);
+                    db.SaveChanges();
+                    _logger.LogInformation("Product added to sum: " + id + "\nto: " + account.AccountId);
+                }
 
-                return Ok();
+               return Ok();
             }
             catch (DbUpdateException ex)
             {
@@ -110,7 +140,15 @@ namespace PlantNurseryAPI.Controllers
         {
             try
             {
-                db.Products.Add(product);
+                var a = new Product()
+                {
+                    Title = product.Title,
+                    Description = product.Description,
+                    Price = product.Price,
+                    Image = product.Image,
+                    IsActive = product.IsActive,
+                };
+                db.Products.Add(a);
                 db.SaveChanges();
                 return Ok();
             }
@@ -131,6 +169,7 @@ namespace PlantNurseryAPI.Controllers
         {
             try
             {
+                product.Id = id;
                 db.Products.Update(product);
                 db.SaveChanges();
                 return Ok();
@@ -150,7 +189,17 @@ namespace PlantNurseryAPI.Controllers
         [HttpPost("{id}/wait")]
         public IActionResult Wait(int id, [FromBody] AccountIdClass AccountId, ApplicationContext db)
         {
-            return StatusCode(500); //TODO какое поведение если кнопка уже была нажата?
+            var account = db.Accounts.FirstOrDefault(x => x.Id == AccountId.AccountId);
+            if (account == null) { _logger.LogWarning("Account not found: " + AccountId.AccountId); return NotFound("Account"); }
+            var customer = db.Customers.First(x => x.AccountId == AccountId.AccountId);
+
+            var waited = db.WaitProducts.FirstOrDefault(x => x.CustomerId == customer.Id);
+            if (waited != null) return Conflict();
+
+            db.WaitProducts.Add(new WaitProduct() { CustomerId = customer.Id, ProductId = id });
+            db.SaveChanges();
+
+            return Ok();
         }
 
         [HttpPost("{id}/favorite")]
