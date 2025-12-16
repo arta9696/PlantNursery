@@ -1,5 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using PlantNurseryAPI.Database;
 using PlantNurseryAPI.Model;
 
@@ -19,7 +21,20 @@ namespace PlantNurseryAPI
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddDbContext<ApplicationContext>((serviceProvider, options) =>
+            {
+                var env = serviceProvider.GetRequiredService<IWebHostEnvironment>();
+                var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+
+                if (env.IsDevelopment())
+                {
+                    options.UseNpgsql(configuration.GetConnectionString("DebugConnection"));
+                }
+                else
+                {
+                    options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+                }
+            });
             builder.Logging.AddConsole();
             builder.Services.AddCors(options =>
             {
