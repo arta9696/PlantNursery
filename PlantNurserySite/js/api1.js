@@ -135,7 +135,7 @@ async function removeFromCart(accountId, productId) {
     message = "Ошибка удаления товара! Попробуйте позже";
     // throw new Error('Ошибка удаления товара');
   } else message = "Товар успешно удален из корзины!";
-  alert(message);
+  console.log(message);
 }
 
 // получить данные профиля
@@ -300,6 +300,22 @@ async function removeFromFavorite(accountId, productId) {
   }
   return res.status;
 }
+
+async function createOrder(orderData) {
+  const res = await fetch(`${API_HOST}/orders/add`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(orderData),
+  });
+
+  if (res.status !== 200) {
+    alert("Ошибка создания заказа! Повторите позднее");
+  }
+  return res.status;
+  // // если бэк возвращает JSON — ок, если пусто — можно вернуть true
+  // try { return await res.json(); } catch { return true; }
+}
+
 
 
 function decodePossiblyEncodedString(encodedString) {

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="ru">
 
 <head>
@@ -18,9 +18,119 @@
     <main>
         <div id="cart-container" class="cart-container">
             <h1>Ваша корзина</h1>
-            <!-- Здесь товары -->
         </div>
     </main>
 </body>
 
+</html> -->
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Сангрия - Корзина</title>
+    <link rel="stylesheet" href="css/style1.css" />
+    <script src="./js/main.js" defer></script>
+    <script src="./js/utils1.js" defer></script>
+    <script src="./storage/storage1.js" defer></script>
+    <script src="./js/api1.js" defer></script>
+    <script src="./js/cart.js" defer></script>
+</head>
+<body>
+    <div id="menu-container"></div>
+    <main>
+        <div id="add-order-cart-container" class="add-order-cart-container">
+            <h1>Ваша корзина</h1>
+            <!-- Товары будут добавлены динамически -->
+        </div>
+    </main>
+    
+    <!-- Модальное окно оформления заказа -->
+    <div id="add-order-checkout-modal" class="add-order-modal-overlay add-order-modal-hidden">
+        <div class="add-order-modal">
+            <div class="add-order-modal-header">
+                <h2>Оформление заказа</h2>
+                <button class="add-order-modal-close">&times;</button>
+            </div>
+            <div class="add-order-modal-body">
+                <form id="add-order-checkout-form">
+                    <div class="add-order-form-group">
+                        <label for="add-order-full-name">ФИО *</label>
+                        <input 
+                            type="text" 
+                            id="add-order-full-name" 
+                            name="full_name" 
+                            placeholder="Иванов Иван Иванович"
+                            required
+                        >
+                        <div class="add-order-form-error" id="add-order-full-name-error"></div>
+                    </div>
+                    
+                    <div class="add-order-form-group">
+                        <label for="add-order-address">Адрес доставки *</label>
+                        <textarea 
+                            id="add-order-address" 
+                            name="address" 
+                            rows="3"
+                            placeholder="Город, улица, дом, квартира"
+                            required
+                        ></textarea>
+                        <div class="add-order-form-error" id="add-order-address-error"></div>
+                    </div>
+                    
+                    <div class="add-order-modal-buttons">
+                        <button type="button" class="add-order-btn-secondary add-order-modal-close">Отмена</button>
+                        <button type="submit" class="add-order-btn-primary">Подтвердить заказ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно подтверждения обновления профиля -->
+    <div id="add-order-profile-confirm-modal" class="add-order-modal-overlay add-order-modal-hidden">
+        <div class="add-order-modal add-order-modal-sm">
+            <div class="add-order-modal-header">
+                <h3>Обновить данные в профиле?</h3>
+                <button class="add-order-modal-close">&times;</button>
+            </div>
+            <div class="add-order-modal-body">
+                <p class="add-order-modal-text">
+                    Вы изменили данные профиля. Хотите сохранить эти изменения в вашем профиле?
+                </p>
+                <div class="add-order-modal-buttons">
+                    <button type="button" class="add-order-btn-secondary" id="add-order-cancel-profile-update">
+                        Нет, оставить как было
+                    </button>
+                    <button type="button" class="add-order-btn-primary" id="add-order-confirm-profile-update">
+                        Да, обновить профиль
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно успешного оформления -->
+    <div id="add-order-success-modal" class="add-order-modal-overlay add-order-modal-hidden">
+        <div class="add-order-modal add-order-modal-sm">
+            <div class="add-order-modal-header">
+                <h3>Заказ успешно создан!</h3>
+                <button class="add-order-modal-close">&times;</button>
+            </div>
+            <div class="add-order-modal-body">
+                <div class="add-order-success-icon">✓</div>
+                <p class="add-order-modal-text">
+                    Ваш заказ принят в обработку.<br>
+                    Менеджер свяжется с вами для уточнения деталей в ближайшее время.
+                </p>
+                <div class="add-order-modal-buttons">
+                    <button type="button" class="add-order-btn-primary add-order-modal-close" id="add-order-success-ok-btn">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
 </html>
