@@ -34,9 +34,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
             setAccountid(data.accountId); // сохранение account_id
             
-            // Сохраняем wait_products в localStorage - для показа уведомлений
-            if (data.wait_products && Array.isArray(data.wait_products)) {
-                setWaitProducts(JSON.stringify(data.wait_products));
+            // Сохраняем waitProducts в localStorage - для показа уведомлений
+            if (data.waitProducts && Array.isArray(data.waitProducts)) {
+                setWaitProducts(JSON.stringify(data.waitProducts));
             }
 
             //проверка роли
