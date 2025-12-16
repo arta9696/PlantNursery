@@ -20,8 +20,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // Сортируем по дате: самые новые сверху
         orders.sort((a, b) => {
-            const dateA = parseDateString(a.created_date);
-            const dateB = parseDateString(b.created_date);
+            const dateA = parseDateString(a.createdDate);
+            const dateB = parseDateString(b.createdDate);
             return dateB - dateA; // новые сверху
         });
 
@@ -46,43 +46,31 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 // Функция для парсинга строки даты в Date объект
 function parseDateString(dateString) {
-    if (!dateString) return new Date(0);
-    
-    // Пробуем разные форматы дат
-    const formats = [
-        /^(\d{1,2})\.(\d{1,2})\.(\d{4})$/, // dd.mm.yyyy
-        /^(\d{1,2})\.(\d{1,2})\.(\d{2})$/, // dd.mm.yy
-        /^(\d{4})-(\d{1,2})-(\d{1,2})$/,   // yyyy-mm-dd
-    ];
-    
-    for (const pattern of formats) {
-        const match = dateString.match(pattern);
-        if (match) {
-            let day, month, year;
-            
-            if (pattern.source.includes('yyyy-')) {
-                // yyyy-mm-dd
-                year = parseInt(match[1], 10);
-                month = parseInt(match[2], 10) - 1;
-                day = parseInt(match[3], 10);
-            } else {
-                // dd.mm.yyyy или dd.mm.yy
-                day = parseInt(match[1], 10);
-                month = parseInt(match[2], 10) - 1;
-                year = parseInt(match[3], 10);
-                
-                // Корректируем двузначный год
-                if (year < 100) {
-                    year = year >= 0 && year <= 50 ? 2000 + year : 1900 + year;
-                }
-            }
-            
-            return new Date(year, month, day);
-        }
-    }
-    
-    // Если не нашли подходящий формат, пробуем стандартный парсинг
-    return new Date(dateString);
+  if (!dateString) return new Date(0);
+
+  // если прилетит ISO типа 2025-12-16T00:00:00Z — берём только дату
+  const s = String(dateString).trim().slice(0, 10);
+
+  let m;
+
+  // yyyy-mm-dd
+  m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if (m) return new Date(+m[1], +m[2] - 1, +m[3]);
+
+  // dd.mm.yyyy
+  m = s.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
+  if (m) return new Date(+m[3], +m[2] - 1, +m[1]);
+
+  // dd.mm.yy
+  m = s.match(/^(\d{1,2})\.(\d{1,2})\.(\d{2})$/);
+  if (m) {
+    let year = +m[3];
+    year = year <= 50 ? 2000 + year : 1900 + year;
+    return new Date(year, +m[2] - 1, +m[1]);
+  }
+
+  const d = new Date(dateString);
+  return isNaN(d.getTime()) ? new Date(0) : d;
 }
 
 function renderHistoryOrder(order, displayNumber) {
@@ -92,11 +80,11 @@ function renderHistoryOrder(order, displayNumber) {
 
     // Считаем общую сумму заказа
     const totalAmount = order.items.reduce((sum, item) => {
-        return sum + (item.price_at_moment * item.count);
+        return sum + (item.priceAtMoment * item.count);
     }, 0);
 
     // Подсчитываем общее количество товаров
-    const totalItems = order.items.reduce((sum, item) => sum + item.count, 0);
+    const totalItems = order.items.reduce((sum, item) => sum + Number(item.count), 0);
 
     orderDiv.innerHTML = `
         <div class="history-order-header">
@@ -117,7 +105,7 @@ function renderHistoryOrder(order, displayNumber) {
                     <line x1="8" y1="2" x2="8" y2="6"></line>
                     <line x1="3" y1="10" x2="21" y2="10"></line>
                 </svg>
-                <span>${formatHistoryDate(order.created_date)}</span>
+                <span>${formatHistoryDate(order.createdDate)}</span>
             </div>
             <div class="history-order-items-count">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="history-order-icon">
@@ -146,8 +134,8 @@ function renderHistoryOrder(order, displayNumber) {
                                 <div class="history-item-quantity">${item.count} шт.</div>
                             </div>
                             <div class="history-item-price">
-                                <span class="history-item-unit-price">${item.price_at_moment.toFixed(2)} ₽/шт</span>
-                                <span class="history-item-total-price">${(item.price_at_moment * item.count).toFixed(2)} ₽</span>
+                                <span class="history-item-unit-price">${Number(item.priceAtMoment).toFixed(2)} ₽/шт</span>
+                                <span class="history-item-total-price">${(Number(item.priceAtMoment) * Number(item.count)).toFixed(2)} ₽</span>
                             </div>
                         </div>
                     `).join("")}
@@ -173,57 +161,27 @@ function getHistoryPlural(count) {
 
 // Форматирование даты для отображения
 function formatHistoryDate(dateString) {
-    if (!dateString) return "Дата не указана";
-    
-    // Если дата уже в формате dd.mm.yy
-    const ddMMyyRegex = /^\d{1,2}\.\d{1,2}\.\d{2}$/;
-    if (ddMMyyRegex.test(dateString)) {
-        const parts = dateString.split('.');
-        const day = parts[0];
-        const month = parts[1];
-        let year = parts[2];
-        
-        // Преобразуем двузначный год в четырехзначный
-        if (year.length === 2) {
-            const yearNum = parseInt(year, 10);
-            year = yearNum >= 0 && yearNum <= 50 ? `20${year}` : `19${year}`;
-        }
-        
-        return `${day}.${month}.${year}`;
-    }
-    
-    // Если дата уже в формате dd.mm.yyyy
-    const ddMMyyyyRegex = /^\d{1,2}\.\d{1,2}\.\d{4}$/;
-    if (ddMMyyyyRegex.test(dateString)) {
-        return dateString;
-    }
-    
-    // Пробуем создать Date объект
-    const date = parseDateString(dateString);
-    
-    // Проверяем валидность
-    if (!isNaN(date.getTime())) {
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-        return `${day}.${month}.${year}`;
-    }
-    
-    return dateString;
+  const d = parseDateString(dateString);
+  if (!d || isNaN(d.getTime())) return "Дата не указана";
+
+  const dd = String(d.getDate()).padStart(2, "0");
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const yyyy = d.getFullYear();
+  return `${dd}.${mm}.${yyyy}`;
 }
 
 // Инициализация аккордеонов истории
 function initHistoryAccordions() {
     const accordionToggles = document.querySelectorAll('.history-accordion-toggle');
-    
+
     accordionToggles.forEach(toggle => {
-        toggle.addEventListener('click', function() {
+        toggle.addEventListener('click', function () {
             const accordion = this.parentElement;
             const content = accordion.querySelector('.history-accordion-content');
             const icon = this.querySelector('.history-accordion-icon');
-            
+
             accordion.classList.toggle('history-accordion-active');
-            
+
             if (accordion.classList.contains('history-accordion-active')) {
                 content.style.maxHeight = content.scrollHeight + 'px';
                 icon.style.transform = 'rotate(180deg)';
