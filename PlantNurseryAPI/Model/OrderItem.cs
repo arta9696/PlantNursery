@@ -10,6 +10,7 @@ namespace PlantNurseryAPI.Model
         public Order? Order { get; set; }
         [ForeignKey(nameof(Product))]
         public int? ProductId { get; set; }
+        public string? Title { get; set; }
         public Product? Product { get; set; }
         public int Count { get; set; }
         public float PriceAtMoment { get; set; }

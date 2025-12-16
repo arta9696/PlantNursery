@@ -33,7 +33,7 @@ namespace PlantNurseryAPI.Controllers
                 {
                     var itemList = db.OrderItems
                     .Where(x => x.OrderId == order.Id)
-                    .Join(db.Products, oi => oi.ProductId, p => p.Id, (oi, p) => new OrderItemTitle()
+                    .Join(db.Products, oi => oi.ProductId, p => p.Id, (oi, p) => new OrderItem()
                     {
                         Id = oi.Id,
                         OrderId = oi.OrderId,
@@ -47,6 +47,8 @@ namespace PlantNurseryAPI.Controllers
                         AccountId = account.Id,
                         FullName = order.FullName,
                         Address = order.Address,
+                        CreatedDate = order.CreationDate,
+                        Title = order.Title,
                         Items = [.. itemList]
                     });
                 }

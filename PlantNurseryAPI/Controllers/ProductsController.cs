@@ -25,7 +25,7 @@ namespace PlantNurseryAPI.Controllers
             try
             {
                 _logger.LogInformation("Starting products select");
-                var products = db.Products.OrderBy(p=>p.Id).ToList();
+                var products = db.Products.Where(p => p.IsDeleted == false).OrderBy(p=>p.Id).ToList();
                 _logger.LogInformation("Products selected");
                 return Ok(new { products });
             }

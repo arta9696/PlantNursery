@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace PlantNurseryAPI.Model
 {
@@ -9,8 +10,9 @@ namespace PlantNurseryAPI.Model
         public int AccountId { get; set; }
         public string? FullName { get; set; }
         public string? Address { get; set; }
+        [JsonIgnore]
         public Account Account { get; set; } = null!;
-
+        [JsonIgnore]
         public List<CartItem> CartItems { get; } = [];
     }
 }
