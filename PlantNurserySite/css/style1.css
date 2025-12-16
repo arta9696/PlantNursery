@@ -73,7 +73,7 @@
 .main-nav button {
     /* min-width: 150px; */
     flex-wrap: wrap;     /* чтобы при узком экране переносилось */
-    min-width: 130px;
+    min-width: 100px;
     text-align: center;
     margin: 0 5px;
     padding: 8px 15px;

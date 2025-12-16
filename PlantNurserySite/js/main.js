@@ -7,7 +7,7 @@ function loadMenu() {
         <header class="main-header">
         <div class="logo">
             <p class="logo-title">САНГРИЯ</p>
-            <span class="logo-subtitle">питомник растений</span>
+            <span class="logo-subtitle">питомник<br>растений</span>
         </div>
         <nav class="main-nav">
             <div class="search-container">
@@ -52,6 +52,7 @@ function renderMainPage() {
         content = `
             <button id="favorite-btn">Избранное</button>
             <button id="cart-btn">Корзина</button>
+            <button id="history-order-btn">История заказов</button>
             <button id="profile-btn">Мой профиль</button>
             <button id="logout-btn">Выход</button>
         `;
