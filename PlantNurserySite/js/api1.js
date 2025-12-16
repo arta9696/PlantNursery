@@ -8,10 +8,11 @@ async function getProducts() {
 
 // --- Товар по ID ---
 async function getProductById(accountId = null, productId) {
+  const body = accountId == null ? {} : { accountId }; // null или undefined → не отправляем
   const res = await fetch(`${API_HOST}/products/${productId}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ accountId })
+    body: JSON.stringify({ body })
   });
 
   if (res.status === 200) {
