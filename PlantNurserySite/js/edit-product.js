@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("description").value = product.description;
         document.getElementById("price").value = product.price;
         document.getElementById("image").value = product.image;
-        document.getElementById("isActive").checked = product.is_active;
+        document.getElementById("isActive").checked = product.isActive;
 
     } catch (err) {
         showError("Ошибка загрузки данных товара!");
