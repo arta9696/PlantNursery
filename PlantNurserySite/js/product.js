@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const accountId = getAccountId();
 
     try {
-        const product = await getProductById(ROLES.CUSTOMER ? getAccountId() : null, productId);
+        const product = await getProductById(role == ROLES.CUSTOMER ? getAccountId() : null, productId);
 
         const isInStock = product.isActive === true;                    // в наличии или нет
         const maxCount =                                                // максимальное число, которе можно добавить в корзину
