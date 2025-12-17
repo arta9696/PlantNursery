@@ -59,7 +59,7 @@ namespace PlantNurseryAPI.Controllers
                 }
                 var customer = db.Customers.First(x => x.AccountId == AccountId.AccountId);
                 var cartItem = db.CartItems.FirstOrDefault(x => x.CustomerId == customer.Id && x.ProductId == id);
-                int count = 0;
+                int count = 10;
                 if (cartItem != null)
                 {
                     count = 10 - cartItem.Count;

@@ -4,7 +4,7 @@ namespace PlantNurseryAPI.DTO
 {
     public class ProductAllowedCount: Product
     {
-        public int AlowedCount { get; set; }
+        public int AllowedCount { get; set; }
         public ProductAllowedCount()
         {
         }
@@ -17,7 +17,7 @@ namespace PlantNurseryAPI.DTO
             Image = product.Image;
             IsActive = product.IsActive;
             IsDeleted = product.IsDeleted;
-            AlowedCount = alowedCount;
+            AllowedCount = alowedCount;
         }
     }
 }
