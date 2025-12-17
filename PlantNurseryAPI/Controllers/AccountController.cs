@@ -65,8 +65,9 @@ namespace PlantNurseryAPI.Controllers
                 var waitedProducts = db.WaitProducts
                     .Where(x => x.CustomerId == customer.Id && x.IsNotified == false)
                     .Join(db.Products, x => x.ProductId, p => p.Id, (x, p) => p)
+                    .Where(p => p.IsActive == true)
                     .ToList();
-                 await db.WaitProducts.Where(x => x.CustomerId == customer.Id && x.IsNotified == false).ForEachAsync(x => { x.IsNotified = true; });
+                await db.WaitProducts.Where(x => x.CustomerId == customer.Id && x.IsNotified == false && waitedProducts.Any(p=>p.Id==x.ProductId)).ForEachAsync(x => { x.IsNotified = true; });
                 db.SaveChanges();
 
                 return Ok(new 
