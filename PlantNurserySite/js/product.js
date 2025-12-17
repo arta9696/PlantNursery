@@ -128,6 +128,31 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         });
 
+        // кнопки + и - для количества товара
+        plusBtn.addEventListener("click", () => {
+            let value = Number(quantityInput.value);
+            if (value < maxCount) {
+                quantityInput.value = value + 1;
+            }
+        });
+
+        minusBtn.addEventListener("click", () => {
+            let value = Number(quantityInput.value);
+            if (value > 1) {
+                quantityInput.value = value - 1;
+            }
+        });
+
+        btn.addEventListener("click", async () => {
+            const count = Number(quantityInput.value);
+            try {
+                const res = await addToCart(accountId, productId, count);
+            } catch (err) {
+                console.error(err);
+                alert("Ошибка при добавлении в корзину.");
+            }
+        });
+
         // --- кнопка избранного только для покупателей ---
         const favoriteBtn = document.createElement("button");
         favoriteBtn.id = "favorite-btn";
@@ -138,7 +163,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         actionRow.appendChild(favoriteBtn);
 
         const favData = await getFavoriteProducts(accountId);
-        let isFavorite = favData.products.some(p => Number(p.id) === productId);
+        let isFavorite = !favData ? false : (favData.products.some(p => Number(p.id) === productId));
 
         if (isFavorite) {
             favoriteBtn.textContent = "♥";
@@ -167,32 +192,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 alert("Ошибка при обновлении избранного");
             }
         });
-
-        // кнопки + и - для количества товара
-        plusBtn.addEventListener("click", () => {
-            let value = Number(quantityInput.value);
-            if (value < maxCount) {
-                quantityInput.value = value + 1;
-            }
-        });
-
-        minusBtn.addEventListener("click", () => {
-            let value = Number(quantityInput.value);
-            if (value > 1) {
-                quantityInput.value = value - 1;
-            }
-        });
-
-        btn.addEventListener("click", async () => {
-            const count = Number(quantityInput.value);
-            try {
-                const res = await addToCart(accountId, productId, count);
-            } catch (err) {
-                console.error(err);
-                alert("Ошибка при добавлении в корзину.");
-            }
-        });
     } catch (err) {
-        list.innerHTML = `<p class="error">Ошибка загрузки товара</p>`;
+        console.error(err);
+        document.getElementById("item-container").innerHTML =
+            `<p class="error">Ошибка загрузки товара</p>`;
     }
 });

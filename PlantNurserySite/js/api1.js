@@ -245,11 +245,11 @@ async function getFavoriteProducts(accountId) {
   if (res.status === 200) {
     return res.json();
   } else if (res.status === 404) {
-    alert("Покупатель не найден.");
+    console.log("Избранное. Покупатель не найден.");
   } else if (res.status === 500) {
-    alert("Ошибка сервера. Попробуйте позже.");
+    console.log("Избранное. Ошибка сервера. Попробуйте позже.");
   } else {
-    alert("Произошла ошибка при отображении товаров.");
+    console.log("Избранное. Произошла ошибка при отображении товаров.");
   }
   return;
 }
